@@ -1,0 +1,39 @@
+name: Lint and Test
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_call:
+jobs:
+  lint-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: ignferry/bcr-database
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bcr_management_dashboard
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Run lint
+        run: npm run lint
+      - name: Create .env file for testing
+        run: |
+          touch .env
+          echo DATABASE_URL=postgres://postgres:postgres@localhost:5432/bcr_management_dashboard >> .env
+      - name: Run tests
+        env:
+          JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+        run: npm run test
