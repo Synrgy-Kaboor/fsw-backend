@@ -29,11 +29,8 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint
-      - name: Create .env file for testing
-        run: |
-          touch .env
-          echo DATABASE_URL=postgres://postgres:postgres@localhost:5432/bcr_management_dashboard >> .env
       - name: Run tests
         env:
           JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/bcr_management_dashboard
         run: npm run test
