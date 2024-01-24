@@ -23,6 +23,8 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+    container:
+      image: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
