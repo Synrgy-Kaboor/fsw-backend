@@ -7,22 +7,19 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('users').insert([
     {
-      id: '0f9a16f5-2d9a-4fa5-8bc2-9a00df22921d',
-      email: 'admin@gmail.com',
-      password: '$2b$10$0Ych8CC3UyR9R0BQOv8xI.2Yi5eptQZl1giyuiqPLJGa.pBOiq/Y2', // password
-      is_admin: true,
-    },
-    {
-      id: '2741babd-7c11-4bf3-806b-c1d08d58f6ef',
+      id: 1,
       email: 'user1@gmail.com',
-      password: '$2b$10$0Ych8CC3UyR9R0BQOv8xI.2Yi5eptQZl1giyuiqPLJGa.pBOiq/Y2',
-      is_admin: false,
+      password: '$2a$10$a80r.Z/5K5TvN7npjjOOde5pKDU42SNm9w8Ba6OdhReXer/SFUHJm', // password
     },
     {
-      id: '878322f2-e61a-484e-b077-05f35f8051a8',
+      id: 2,
       email: 'user2@gmail.com',
-      password: '$2b$10$0Ych8CC3UyR9R0BQOv8xI.2Yi5eptQZl1giyuiqPLJGa.pBOiq/Y2',
-      is_admin: false,
+      password: '$2a$10$7qwuuml2akFZEq7iI6zwq.e2xjsEjErawFs54DJA7mi6QBvXaDmm2',
+    },
+    {
+      id: 3,
+      email: 'user3@gmail.com',
+      password: '$2a$10$DRpIMx/5eY1yic6.oijkHOIau9Je3g..9mcfvRen70aIRh.LlJrHS',
     },
   ]);
 }
