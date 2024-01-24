@@ -10,22 +10,19 @@ jobs:
     name: Lint and Test
     runs-on: ubuntu-latest
     services:
-      test-service:
-        image: docker/cowsay
-        # image: ignferry/bcr-database
-        # env:
-        #   POSTGRES_USER: postgres
-        #   POSTGRES_PASSWORD: postgres
-        #   POSTGRES_DB: bcr_management_dashboard
-        # options: >-
-        #   --health-cmd pg_isready
-        #   --health-interval 10s
-        #   --health-timeout 5s
-        #   --health-retries 5
-        # ports:
-        #   - 5432:5432
-    container:
-      image: ubuntu-latest
+      database:
+        image: ignferry/bcr-database
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bcr_management_dashboard
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
