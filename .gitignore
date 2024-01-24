@@ -5,3 +5,5 @@ src/**/*.js
 .env
 /coverage
 /dist
+yarn-error.log
+yarn.lock
