@@ -31,6 +31,6 @@ jobs:
         run: npm run lint
       - name: Run tests
         env:
-          JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+          JWT_PRIVATE_KEY: mRmdusYm3FaYJhP1AQ183qxWEbZ-4N0jOYhLRdU7Bwg
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/kaboor
         run: npm run test
