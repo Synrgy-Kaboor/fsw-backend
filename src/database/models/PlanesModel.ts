@@ -14,7 +14,8 @@ export class PlaneModel extends Model {
     //eslint-disable-line
     return 'planes';
   }
-
+  
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
       plane_classes: {

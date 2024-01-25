@@ -7,10 +7,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       exclude: [
-        'src/database/migrations',
-        'src/database/seeds',
         'src/index.ts',
-        'public',
+        'src/database',
         '**/*.js',
       ],
     },

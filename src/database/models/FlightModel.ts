@@ -19,6 +19,7 @@ export class FlightModel extends Model {
     return 'flights';
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
       outbound_bookings: {

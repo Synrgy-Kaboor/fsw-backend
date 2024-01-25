@@ -17,6 +17,7 @@ export class PaymentModel extends Model {
     return 'payments';
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
       payment_method: {

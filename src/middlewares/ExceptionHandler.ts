@@ -19,6 +19,7 @@ export const exceptionHandler = (
   next: NextFunction,
 ): void => {
   if (err) {
+    console.log(err);
     if (
       err instanceof ExpressValidationException ||
       err instanceof NoFileReceivedException

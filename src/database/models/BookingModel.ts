@@ -24,6 +24,7 @@ export class BookingModel extends Model {
     return 'bookings';
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
       orderer: {

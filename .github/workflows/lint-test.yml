@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     services:
       database:
-        image: ignferry/bcr-database
+        image: postgres:16-alpine
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: bcr_management_dashboard
+          POSTGRES_DB: kaboor
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -32,5 +32,5 @@ jobs:
       - name: Run tests
         env:
           JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/bcr_management_dashboard
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/kaboor
         run: npm run test

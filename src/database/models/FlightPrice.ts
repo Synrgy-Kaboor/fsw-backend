@@ -18,6 +18,7 @@ export class FlightPriceModel extends Model {
     return 'flight_prices';
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
       plane_class: {
