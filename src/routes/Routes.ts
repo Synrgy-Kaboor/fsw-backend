@@ -2,8 +2,8 @@ import type { Router } from 'express';
 /**
  * @openapi
  * tags:
- *  -   name: Cars
- *      description: Car resource endpoints
+ *  -   name: User
+ *      description: User resource endpoints
  */
 
 export interface Routes {

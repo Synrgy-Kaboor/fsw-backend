@@ -1,9 +1,9 @@
-import CarRoutes from '@routes/CarRoutes';
 import { App } from './App';
 import { type Routes } from '@routes/Routes';
+import UserRoutes from '@routes/UserRoutes';
 
 const routes: Routes[] = [
-  new CarRoutes()
+  new UserRoutes()
 ];
 
 const app = new App(routes);

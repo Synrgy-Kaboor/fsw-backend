@@ -15,6 +15,7 @@ export class AirportModel extends Model {
     return 'airports';
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
       city: {

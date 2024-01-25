@@ -27,7 +27,6 @@ export class App {
 
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
-    this.app.set('view engine', 'ejs');
     this.app.use(cors());
 
     // Logs start of request

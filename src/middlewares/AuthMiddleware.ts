@@ -26,7 +26,7 @@ export const authenticateToken = (
     }
     try {
       // Check if JWT payload follows standard format
-      req.user = payload as { id: string; email: string };
+      req.user = payload as { email: string }
     } catch {
       next(new InvalidTokenException());
     }
