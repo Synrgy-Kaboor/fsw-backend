@@ -5,7 +5,10 @@ export async function up(knex: Knex): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/return-await
   return knex.schema.createTable('bookings', (table: Knex.TableBuilder) => {
     table.bigIncrements('id').primary();
-    table.string('class_code', 10);
+    table.integer('total_adult').notNullable();
+    table.integer('total_children').notNullable();
+    table.integer('total_baby').notNullable();
+    table.string('class_code', 10).notNullable();
     table.boolean('add_baggage').defaultTo(false);
     table.boolean('add_travel_insurance').defaultTo(false);
     table.boolean('add_baggage_insurance').defaultTo(false);
@@ -23,6 +26,9 @@ export async function up(knex: Knex): Promise<void> {
 
     table.bigint('payment_id');
     table.foreign('payment_id').references('payments.id');
+
+    table.bigint('voucher_id');
+    table.foreign('voucher_id').references('vouchers.id');
   });
 }
 

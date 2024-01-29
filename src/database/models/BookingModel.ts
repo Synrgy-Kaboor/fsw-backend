@@ -3,9 +3,13 @@ import { OrdererModel } from './OrdererModel';
 import { PassengerModel } from './PassengerModel';
 import { PaymentModel } from './PaymentModel';
 import { FlightModel } from './FlightModel';
+import { VoucherModel } from './VoucherModel';
 
 export class BookingModel extends Model {
   id!: number;
+  total_adult!: number;
+  total_children!: number;
+  total_baby!: number;
   class_code!: string;
   add_baggage!: boolean;
   add_travel_insurance!: boolean;
@@ -65,6 +69,14 @@ export class BookingModel extends Model {
         join: {
           from: 'bookings.return_flight_id',
           to: 'flights.id'
+        }
+      },
+      voucher: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: VoucherModel,
+        join: {
+          from: 'bookings.voucher_id',
+          to: 'vouchers.id'
         }
       }
     }
