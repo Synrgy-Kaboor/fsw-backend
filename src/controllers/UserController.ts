@@ -23,12 +23,15 @@ export class UserController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const user = await this.userService.getPersonalInformation(req.user.email);
+      const email = req.user.email;
+      console.log(req.user)
+      console.log(email);
+      const user = await this.userService.getPersonalInformation(email);
       const responseData: IPersonalInfoBody = {
         title: user.title,
         fullName: user.full_name,
         gender: user.gender,
-        birthday: dateToString(user.birth_day),
+        birthday: user.birth_day ? dateToString(user.birth_day) : '',
         nation: user.nation,
         city: user.city,
         address: user.address,
@@ -58,7 +61,7 @@ export class UserController {
         title: req.body.title,
         full_name: req.body.fullName,
         gender: req.body.gender,
-        birth_day: stringToDate(req.body.birthday),
+        birth_day: req.body.birthday ? stringToDate(req.body.birthday) : undefined,
         nation: req.body.nation,
         city: req.body.city,
         address: req.body.address,
@@ -71,7 +74,7 @@ export class UserController {
         title: user.title,
         fullName: user.full_name,
         gender: user.gender,
-        birthday: dateToString(user.birth_day),
+        birthday: user.birth_day ? dateToString(user.birth_day) : '',
         nation: user.nation,
         city: user.city,
         address: user.address,

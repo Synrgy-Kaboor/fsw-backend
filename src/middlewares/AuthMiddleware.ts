@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import NoTokenException from '@exceptions/NoTokenException';
 import InvalidTokenException from '@exceptions/InvalidTokenException';
 
-const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY ?? '';
+const JWT_PRIVATE_KEY = Buffer.from(process.env.JWT_PRIVATE_KEY ?? '', 'base64');
 
 export const authenticateToken = (
   req: Request<any>,
@@ -26,7 +26,9 @@ export const authenticateToken = (
     }
     try {
       // Check if JWT payload follows standard format
-      req.user = payload as { email: string }
+      const initialPayload = payload as { sub: string };
+      const user = { email: initialPayload.sub }
+      req.user = user;
     } catch {
       next(new InvalidTokenException());
     }
