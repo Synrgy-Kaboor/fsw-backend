@@ -3,11 +3,9 @@ import { PlaneClassModel } from './PlaneClassModel';
 
 export class FlightPriceModel extends Model {
   id!: number;
-  price!: number;
-  baggage_price!: number;
-  travel_insurance_price!: number;
-  delay_insurance_price!: number;
-  baggage_protection_price!: number;
+  adult_price!: number;
+  child_price!: number;
+  baby_price!: number;
 
   flight_id!: number;
   plane_class_id!: number;

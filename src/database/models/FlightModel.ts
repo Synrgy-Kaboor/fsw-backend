@@ -2,7 +2,7 @@ import { Model, type ModelObject } from 'objection';
 import { BookingModel } from './BookingModel';
 import { PlaneModel } from './PlanesModel';
 import { AirportModel } from './AirportsModel';
-import { FlightPriceModel } from './FlightPrice';
+import { FlightPriceModel } from './FlightPriceModel';
 
 export class FlightModel extends Model {
   id!: number;

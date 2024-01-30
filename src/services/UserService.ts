@@ -5,6 +5,7 @@ export class UserService {
   private readonly userRepository = new UserRepository();
 
   public async getPersonalInformation(email: string): Promise<UserModel> {
+    console.log(email);
     return await this.userRepository.getPersonalInformationByEmail(email);
   }
 

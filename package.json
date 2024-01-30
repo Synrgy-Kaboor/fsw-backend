@@ -9,7 +9,8 @@
     "migrate": "cd src/database && npx knex migrate:latest",
     "seed": "cd src/database && npx knex seed:run",
     "test": "npm run migrate && npm run seed && vitest run --coverage",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "rollback-migrations": "cd src/database && npx knex migrate:rollback --all"
   },
   "author": "",
   "license": "ISC",
