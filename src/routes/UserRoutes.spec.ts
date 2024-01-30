@@ -5,11 +5,11 @@ import logger from '@utils/logger';
 import UserRoutes from './UserRoutes';
 import supertest from 'supertest';
 
-const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY ?? '';
+const JWT_PRIVATE_KEY = Buffer.from(process.env.JWT_PRIVATE_KEY ?? '', 'base64');
 
 const JWT_TOKEN = jwt.sign(
   {
-    email: 'user1@gmail.com',
+    sub: 'user1@gmail.com',
   },
   JWT_PRIVATE_KEY,
   {
