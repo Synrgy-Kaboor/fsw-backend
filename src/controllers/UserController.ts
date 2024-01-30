@@ -24,8 +24,6 @@ export class UserController {
   ): Promise<void> => {
     try {
       const email = req.user.email;
-      console.log(req.user)
-      console.log(email);
       const user = await this.userService.getPersonalInformation(email);
       const responseData: IPersonalInfoBody = {
         title: user.title,
