@@ -1,8 +1,8 @@
 import { Model, type ModelObject } from 'objection';
 import { BookingModel } from './BookingModel';
-import { PlaneModel } from './PlanesModel';
-import { AirportModel } from './AirportsModel';
-import { FlightPriceModel } from './FlightPriceModel';
+import { type Plane, PlaneModel } from './PlanesModel';
+import { type Airport, AirportModel } from './AirportsModel';
+import { type FlightPrice, FlightPriceModel } from './FlightPriceModel';
 
 export class FlightModel extends Model {
   id!: number;
@@ -12,6 +12,12 @@ export class FlightModel extends Model {
   plane_id!: number;
   origin_airport_id!: number;
   destination_airport_id!: number;
+
+  plane!: Plane;
+  origin_airport!: Airport;
+  destination_airport!: Airport;
+  flight_prices!: FlightPrice[];
+
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {

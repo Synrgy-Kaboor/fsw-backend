@@ -1,9 +1,9 @@
 import { Model, type ModelObject } from 'objection';
-import { OrdererModel } from './OrdererModel';
-import { PassengerModel } from './PassengerModel';
-import { PaymentModel } from './PaymentModel';
-import { FlightModel } from './FlightModel';
-import { VoucherModel } from './VoucherModel';
+import { type Orderer, OrdererModel } from './OrdererModel';
+import { type Passenger, PassengerModel } from './PassengerModel';
+import { type Payment, PaymentModel } from './PaymentModel';
+import { type Flight, FlightModel } from './FlightModel';
+import { type Voucher, VoucherModel } from './VoucherModel';
 
 export class BookingModel extends Model {
   id!: number;
@@ -21,6 +21,13 @@ export class BookingModel extends Model {
   return_flight_id!: number;
   creator_id!: number;
   payment_id!: number;
+
+  orderer!: Orderer;
+  passengers!: Passenger[];
+  payment!: Payment;
+  outbound_flight!: Flight;
+  return_flight!: Flight;
+  voucher!: Voucher;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {
