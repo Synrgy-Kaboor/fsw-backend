@@ -34,14 +34,7 @@ export class BookingRepository {
   public async getBooking(id: number): Promise<Booking> {
     return await BookingModel.query()
       .findById(id)
-      .withGraphFetched([
-        'orderer', 
-        'passengers', 
-        'payment', 
-        'outbound_flight',
-        'return_flight',
-        'voucher'
-      ])
+      .withGraphFetched('[orderer, passengers, payment, outbound_flight, return_flight, voucher]')
       .throwIfNotFound();
   }
 

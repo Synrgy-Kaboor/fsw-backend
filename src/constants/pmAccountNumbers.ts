@@ -1,0 +1,6 @@
+export const PM_ACCOUNT_NUMBERS = {
+  BCA: '4829-2933-01',
+  BRI: '0295-2952-2952',
+  BNI: '2950-2051-2053',
+  Mandiri: '0259-5933-2953'
+}

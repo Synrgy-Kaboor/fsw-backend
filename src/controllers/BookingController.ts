@@ -1,3 +1,4 @@
+import { PM_ACCOUNT_NUMBERS } from '@constants/pmAccountNumbers';
 import { type Booking } from '@models/BookingModel';
 import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
@@ -25,20 +26,20 @@ interface ICreateBookingRequestBody {
 }
 
 interface IPaymentDetailsBody {
-  methodName: string;
-  accountNumber: string;
-  totalPrice: number;
-  paymentCompleted: boolean;
-  expiredTime: string;
+  methodName?: string;
+  accountNumber?: string;
+  totalPrice?: number;
+  paymentCompleted?: boolean;
+  expiredTime?: string;
 }
 
 interface IPaymentStatusBody {
-  methodName: string;
-  totalPrice: number;
-  expiredTime: string;
-  paymentCompleted: boolean;
-  paymentDateTime: string;
-  invoiceNumber: string;
+  methodName?: string;
+  totalPrice?: number;
+  expiredTime?: string;
+  paymentCompleted?: boolean;
+  paymentDateTime?: string;
+  invoiceNumber?: string;
 }
 
 export class BookingController {
@@ -102,12 +103,33 @@ export class BookingController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const booking = await this.bookingService.getBooking(req.params.id);
+
+      let accountNumber;
+
+      switch (booking.payment.payment_method) {
+        case 'BCA':
+          accountNumber = PM_ACCOUNT_NUMBERS.BCA;
+          break;
+        case 'BRI': 
+          accountNumber = PM_ACCOUNT_NUMBERS.BRI;
+          break;
+        case 'BNI':
+          accountNumber = PM_ACCOUNT_NUMBERS.BNI;
+          break;
+        case 'Mandiri':
+          accountNumber = PM_ACCOUNT_NUMBERS.Mandiri;
+          break;
+        default: 
+          accountNumber = 'Method Invalid';
+      }
+
       const responseData: IPaymentDetailsBody = {
-        methodName: '',
-        accountNumber: '',
-        totalPrice: 0,
-        paymentCompleted: false,
-        expiredTime: ''
+        methodName: booking.payment.payment_method,
+        accountNumber,
+        totalPrice: booking.payment.total_price,
+        paymentCompleted: booking.payment.payment_completed,
+        expiredTime: booking.payment.expired_time?.toISOString()
       };
 
       res.status(200).json(responseData);
@@ -122,13 +144,15 @@ export class BookingController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const booking = await this.bookingService.getBooking(req.params.id);
+
       const responseData: IPaymentStatusBody = {
-        methodName: '',
-        totalPrice: 0,
-        expiredTime: '',
-        paymentCompleted: false,
-        paymentDateTime: '',
-        invoiceNumber: ''
+        methodName: booking.payment.payment_method,
+        totalPrice: booking.payment.total_price,
+        expiredTime: booking.payment.expired_time?.toISOString(),
+        paymentCompleted: booking.payment.payment_completed,
+        paymentDateTime: booking.payment.payment_date_time?.toISOString(),
+        invoiceNumber: booking.payment.invoice_number
       };
 
       res.status(200).json(responseData);
