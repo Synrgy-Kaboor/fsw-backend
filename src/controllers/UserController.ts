@@ -1,6 +1,6 @@
 import type { User } from '@models/UserModel';
 import { UserService } from '@services/UserService';
-import { dateToString, stringToDate } from '@utils/formatter';
+import { dateToString, stringToDate } from '@utils/dateUtils';
 import type { NextFunction, Request, Response } from 'express';
 
 interface IPersonalInfoBody {

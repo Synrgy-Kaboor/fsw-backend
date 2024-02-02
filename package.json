@@ -66,6 +66,7 @@
     "@utils": "dist/utils",
     "@exceptions": "dist/exceptions",
     "@database": "dist/database",
-    "@routes": "dist/routes"
+    "@routes": "dist/routes",
+    "@constants": "dist/constants"
   }
 }

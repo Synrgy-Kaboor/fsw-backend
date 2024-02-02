@@ -12,3 +12,10 @@ export function dateToString(d: Date): string {
 
   return [year, month, date].join('-');
 }
+
+export function addHours(d: Date, hours: number): Date {
+  const newDate = new Date(d);
+  newDate.setHours(d.getHours() + hours);
+
+  return newDate;
+}

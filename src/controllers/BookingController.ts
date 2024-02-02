@@ -1,3 +1,5 @@
+import { type Booking } from '@models/BookingModel';
+import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
 import type { NextFunction, Request, Response } from 'express';
 
@@ -6,7 +8,8 @@ interface IURLParams {
 }
 
 interface ICreateBookingRequestBody {
-  flightId: number;
+  outboundFlightId: number;
+  returnFlightId: number;
   classCode: string;
   totalAdult: number;
   totalChild: number;
@@ -15,6 +18,7 @@ interface ICreateBookingRequestBody {
   passengers: Array<{ fullName: string, title: string }>;
   addBaggage: boolean;
   addTravelInsurance: boolean;
+  addBaggageInsurance: boolean;
   addDelayProtection: boolean;
   paymentMethod: string;
   voucherId: number;
@@ -46,9 +50,44 @@ export class BookingController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const passengers: Array<Partial<Passenger>> = [];
+      for (const p of req.body.passengers) {
+        passengers.push({
+          full_name: p.fullName,
+          title: p.title
+        });
+      }
+      
+      const booking: Partial<Booking> = {
+        outbound_flight_id: req.body.outboundFlightId,
+        return_flight_id: req.body.returnFlightId,
+        class_code: req.body.classCode,
+        total_adult: req.body.totalAdult,
+        total_children: req.body.totalChild,
+        total_baby: req.body.totalBaby,
+        orderer: {
+          full_name: req.body.orderer.fullName,
+          title: req.body.orderer.title,
+          phone_number: req.body.orderer.phoneNumber,
+          email: req.body.orderer.email
+        },
+        passengers,
+        add_baggage: req.body.addBaggage,
+        add_travel_insurance: req.body.addTravelInsurance,
+        add_baggage_insurance: req.body.addBaggageInsurance,
+        add_delay_protection: req.body.addDelayProtection,
+        payment: {
+          payment_method: req.body.paymentMethod
+        },
+        voucher_id: req.body.voucherId
+      }
 
+      await this.bookingService.createBooking(booking, req.user.email);
 
-      res.status(200).json();
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
     } catch (e) {
       next(e);
     }

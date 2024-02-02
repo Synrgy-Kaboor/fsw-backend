@@ -13,7 +13,7 @@ export class BookingModel extends Model {
   class_code!: string;
   add_baggage!: boolean;
   add_travel_insurance!: boolean;
-  add_baggage_insurace!: boolean;
+  add_baggage_insurance!: boolean;
   add_delay_protection!: boolean;
 
   outbound_flight_id!: number;
