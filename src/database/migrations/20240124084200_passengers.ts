@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('title', 50).notNullable();
 
     table.bigint('booking_id');
-    table.foreign('booking_id').references('bookings.id');
+    table.foreign('booking_id').references('bookings.id').onDelete('CASCADE');
   });
 }
 

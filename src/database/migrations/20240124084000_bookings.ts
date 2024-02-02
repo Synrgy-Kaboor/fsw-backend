@@ -13,22 +13,21 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('add_travel_insurance').defaultTo(false);
     table.boolean('add_baggage_insurance').defaultTo(false);
     table.boolean('add_delay_protection').defaultTo(false);
-    table.timestamp('expired_time', { useTz: false });
 
     table.bigint('outbound_flight_id');
-    table.foreign('outbound_flight_id').references('flights.id');
+    table.foreign('outbound_flight_id').references('flights.id').onDelete('CASCADE');
 
     table.bigint('return_flight_id');
-    table.foreign('return_flight_id').references('flights.id');
+    table.foreign('return_flight_id').references('flights.id').onDelete('CASCADE');
 
     table.bigint('creator_id');
-    table.foreign('creator_id').references('users.id');
+    table.foreign('creator_id').references('users.id').onDelete('CASCADE');
 
     table.bigint('payment_id');
-    table.foreign('payment_id').references('payments.id');
+    table.foreign('payment_id').references('payments.id').onDelete('CASCADE');
 
     table.bigint('voucher_id');
-    table.foreign('voucher_id').references('vouchers.id');
+    table.foreign('voucher_id').references('vouchers.id').onDelete('CASCADE');
   });
 }
 

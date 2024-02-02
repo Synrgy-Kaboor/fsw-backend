@@ -9,7 +9,7 @@ export class AirportModel extends Model {
 
   city_id!: number;
   
-  city!: City;
+  city!: Partial<City>;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {

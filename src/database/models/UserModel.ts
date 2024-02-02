@@ -23,7 +23,7 @@ export class UserModel extends Model {
   created_at!: Date;
   updated_at!: Date;
 
-  bookings!: Booking[];
+  bookings!: Array<Partial<Booking>>;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {

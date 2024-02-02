@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('email', 50);
 
     table.bigint('booking_id');
-    table.foreign('booking_id').references('bookings.id');
+    table.foreign('booking_id').references('bookings.id').onDelete('CASCADE');
   });
 }
 

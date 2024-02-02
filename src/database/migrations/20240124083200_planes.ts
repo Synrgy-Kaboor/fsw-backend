@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('capacity_first_class').notNullable().defaultTo(0);
 
     table.integer('airline_id').notNullable();
-    table.foreign('airline_id').references('airlines.id');
+    table.foreign('airline_id').references('airlines.id').onDelete('CASCADE');
   });
 }
 

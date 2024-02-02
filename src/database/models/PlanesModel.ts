@@ -12,7 +12,7 @@ export class PlaneModel extends Model {
 
   airline_id!: number;
   
-  airline!: Airline;
+  airline!: Partial<Airline>;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {

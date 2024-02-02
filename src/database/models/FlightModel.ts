@@ -13,10 +13,10 @@ export class FlightModel extends Model {
   origin_airport_id!: number;
   destination_airport_id!: number;
 
-  plane!: Plane;
-  origin_airport!: Airport;
-  destination_airport!: Airport;
-  flight_prices!: FlightPrice[];
+  plane!: Partial<Plane>;
+  origin_airport!: Partial<Airport>;
+  destination_airport!: Partial<Airport>;
+  flight_prices!: Array<Partial<FlightPrice>>;
 
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style

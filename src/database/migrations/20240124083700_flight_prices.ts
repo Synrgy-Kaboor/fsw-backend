@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('baby_price').notNullable();
 
     table.bigInteger('flight_id').notNullable();
-    table.foreign('flight_id').references('flights.id');
+    table.foreign('flight_id').references('flights.id').onDelete('CASCADE');
   });
 }
 

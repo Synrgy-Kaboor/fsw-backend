@@ -9,7 +9,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 1,
       email: 'user1@gmail.com',
-      password: '$2a$10$a80r.Z/5K5TvN7npjjOOde5pKDU42SNm9w8Ba6OdhReXer/SFUHJm',
+      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS', // password
       title: 'Mr',
       full_name: 'Budi Bayu',
       gender: 'L',
@@ -22,7 +22,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 2,
       email: 'user2@gmail.com',
-      password: '$2a$10$7qwuuml2akFZEq7iI6zwq.e2xjsEjErawFs54DJA7mi6QBvXaDmm2',
+      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
       title: 'Mr',
       full_name: 'Joko Joki',
       gender: 'L',
@@ -35,7 +35,7 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: 3,
       email: 'user3@gmail.com',
-      password: '$2a$10$DRpIMx/5eY1yic6.oijkHOIau9Je3g..9mcfvRen70aIRh.LlJrHS',
+      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
       title: 'Ms',
       full_name: 'Mia Masha',
       gender: 'P',
