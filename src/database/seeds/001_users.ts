@@ -7,9 +7,8 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('users').insert([
     {
-      id: 1,
       email: 'user1@gmail.com',
-      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS', // password
+      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
       title: 'Mr',
       full_name: 'Budi Bayu',
       gender: 'L',
@@ -20,7 +19,6 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: true
     },
     {
-      id: 2,
       email: 'user2@gmail.com',
       password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
       title: 'Mr',
@@ -33,8 +31,7 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: true
     },
     {
-      id: 3,
-      email: 'user3@gmail.com',
+      email: 'ignasiusf@gmail.com',
       password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
       title: 'Ms',
       full_name: 'Mia Masha',

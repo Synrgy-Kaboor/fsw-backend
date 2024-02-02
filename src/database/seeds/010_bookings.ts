@@ -7,7 +7,6 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('bookings').insert([
     {
-      id: 1,
       outbound_flight_id: 1,
       return_flight_id: 2,
       creator_id: 1,
@@ -23,7 +22,6 @@ export async function seed(knex: Knex): Promise<void> {
       add_delay_protection: true
     },
     {
-      id: 2,
       outbound_flight_id: 1,
       return_flight_id: 3,
       creator_id: 1,

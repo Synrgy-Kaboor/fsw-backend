@@ -7,17 +7,14 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('cities').insert([
     {
-      id: 1,
       code: 'SUB',
       name: 'Surabaya'
     },
     {
-      id: 2,
       code: 'JKT',
       name: 'Jakarta'
     },
     {
-      id: 3,
       code: 'PDG',
       name: 'Padang'
     },

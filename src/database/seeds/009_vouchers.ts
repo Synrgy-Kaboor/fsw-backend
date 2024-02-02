@@ -7,7 +7,6 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('vouchers').insert([
     {
-      id: 1,
       code: 'JALANJALAN',
       title: 'Diskon 100rb untuk Pemesanan Tiket',
       description: 'Dapatkan diskonnya segera!',
@@ -16,7 +15,6 @@ export async function seed(knex: Knex): Promise<void> {
       expired_time: new Date(2030, 1, 1)
     },
     {
-      id: 2,
       code: 'LIBURANBCA',
       title: 'Diskon 100rb untuk Pemesanan Tiket',
       description: 'Dapatkan diskonnya segera! Khusus Pelanggan BCA',

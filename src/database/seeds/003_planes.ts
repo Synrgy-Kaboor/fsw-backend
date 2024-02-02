@@ -7,7 +7,6 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('planes').insert([
     {
-      id: 1,
       code: 'AC 2034',
       name: '',
       airline_id: 1,
@@ -17,7 +16,6 @@ export async function seed(knex: Knex): Promise<void> {
       capacity_first_class: 10
     },
     {
-      id: 2,
       code: 'BD 6364',
       name: '',
       airline_id: 2,
@@ -27,7 +25,6 @@ export async function seed(knex: Knex): Promise<void> {
       capacity_first_class: 10
     },
     {
-      id: 3,
       code: 'HD 2634',
       name: '',
       airline_id: 3,

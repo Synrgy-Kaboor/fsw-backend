@@ -7,7 +7,6 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('flights').insert([
     {
-      id: 1,
       plane_id: 1,
       origin_airport_id: 1,
       destination_airport_id: 2,
@@ -15,7 +14,6 @@ export async function seed(knex: Knex): Promise<void> {
       arrival_date_time: new Date(2024, 1, 25, 9)
     },
     {
-      id: 2,
       plane_id: 2,
       origin_airport_id: 2,
       destination_airport_id: 1,
@@ -23,7 +21,6 @@ export async function seed(knex: Knex): Promise<void> {
       arrival_date_time: new Date(2024, 1, 25, 10)
     },
     {
-      id: 3,
       plane_id: 3,
       origin_airport_id: 3,
       destination_airport_id: 4,
