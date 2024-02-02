@@ -16,7 +16,7 @@ export class BookingService {
   private readonly userRepository = new UserRepository();
   private readonly voucherRepository = new VoucherRepository();
 
-  public async createBooking(booking: Partial<Booking>, creatorEmail: string): Promise<void> {
+  public async createBooking(booking: Partial<Booking>, creatorEmail: string): Promise<number> {
     if (!booking.outbound_flight_id || !booking.class_code || !booking.payment) {
       throw new Error();
     }
@@ -80,7 +80,7 @@ export class BookingService {
       Math.random().toString(36).substring(2,7);
 
     // Insert booking
-    await this.bookingRepository.createBooking(booking);
+    return await this.bookingRepository.createBooking(booking);
   }
 
 

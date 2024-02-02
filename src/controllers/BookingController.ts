@@ -82,11 +82,14 @@ export class BookingController {
         voucher_id: req.body.voucherId
       }
 
-      await this.bookingService.createBooking(booking, req.user.email);
+      const bookingId = await this.bookingService.createBooking(booking, req.user.email);
 
       res.status(200).json({
         code: 200,
-        message: 'success'
+        message: 'success',
+        data: {
+          bookingId
+        }
       });
     } catch (e) {
       next(e);

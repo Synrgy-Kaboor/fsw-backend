@@ -1,11 +1,13 @@
 import { type Booking, BookingModel } from '@models/BookingModel';
 import { raw } from 'objection';
 export class BookingRepository {
-  public async createBooking(booking: Partial<Booking>): Promise<void> {
+  public async createBooking(booking: Partial<Booking>): Promise<number> {
     // Create booking
-    await BookingModel.transaction(async trx => {
-      await BookingModel.query(trx).insertGraph(booking);
+    const insertedBooking = await BookingModel.transaction(async trx => {
+      return await BookingModel.query(trx).insertGraph(booking).returning('id');
     });
+
+    return Number(insertedBooking.id);
   }
 
   public async getNumberOfBookedSeats(flightId: number, classCode: string): Promise<number> {
