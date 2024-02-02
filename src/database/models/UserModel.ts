@@ -1,4 +1,5 @@
 import { Model, type ModelObject } from 'objection';
+import { type Booking, BookingModel } from './BookingModel';
 
 export class UserModel extends Model {
   id!: number;
@@ -22,10 +23,26 @@ export class UserModel extends Model {
   created_at!: Date;
   updated_at!: Date;
 
+  bookings!: Array<Partial<Booking>>;
+
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {
     //eslint-disable-line
     return 'users';
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  static get relationMappings() {
+    return {
+      bookings: {
+        relation: Model.HasManyRelation,
+        modelClass: BookingModel,
+        join: {
+          from: 'users.id',
+          to: 'bookings.creator_id'
+        }
+      }
+    }
   }
 }
 

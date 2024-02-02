@@ -8,7 +8,7 @@
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "migrate": "cd src/database && npx knex migrate:latest",
     "seed": "cd src/database && npx knex seed:run",
-    "test": "npm run migrate && npm run seed && vitest run --coverage",
+    "test": "npm run rollback-migrations && npm run migrate && npm run seed && vitest run --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "rollback-migrations": "cd src/database && npx knex migrate:rollback --all"
   },
@@ -66,6 +66,7 @@
     "@utils": "dist/utils",
     "@exceptions": "dist/exceptions",
     "@database": "dist/database",
-    "@routes": "dist/routes"
+    "@routes": "dist/routes",
+    "@constants": "dist/constants"
   }
 }

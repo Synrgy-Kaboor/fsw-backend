@@ -5,7 +5,9 @@ export class VoucherModel extends Model {
   code!: string;
   title!: string;
   description!: string;
+  expired_time!: Date;
   eligible_payment_methods!: string[]
+  maximum_discount!: number;
 
   flight_id!: number;
   plane_class_id!: number;

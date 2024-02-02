@@ -1,5 +1,5 @@
 import { Model, type ModelObject } from 'objection';
-import { CityModel } from './CitiesModel';
+import { type City, CityModel } from './CitiesModel';
 
 export class AirportModel extends Model {
   id!: number;
@@ -8,6 +8,8 @@ export class AirportModel extends Model {
   timezone!: number;
 
   city_id!: number;
+  
+  city!: Partial<City>;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {

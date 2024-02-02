@@ -9,13 +9,13 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('arrival_date_time').notNullable();
 
     table.integer('plane_id').notNullable();
-    table.foreign('plane_id').references('planes.id');
+    table.foreign('plane_id').references('planes.id').onDelete('CASCADE');
 
     table.integer('origin_airport_id').notNullable();
-    table.foreign('origin_airport_id').references('airports.id');
+    table.foreign('origin_airport_id').references('airports.id').onDelete('CASCADE');
 
     table.integer('destination_airport_id').notNullable();
-    table.foreign('destination_airport_id').references('airports.id');
+    table.foreign('destination_airport_id').references('airports.id').onDelete('CASCADE');
   });
 }
 

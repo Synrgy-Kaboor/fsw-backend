@@ -1,13 +1,18 @@
 import { Model, type ModelObject } from 'objection';
-import { PlaneClassModel } from './PlaneClassModel';
-import { AirlineModel } from './AirlineModel';
+import { type Airline, AirlineModel } from './AirlineModel';
 
 export class PlaneModel extends Model {
   id!: number;
   code!: string;
   name!: string;
+  capacity_economy!: number;
+  capacity_economy_premium!: number;
+  capacity_business!: number;
+  capacity_first_class!: number;
 
   airline_id!: number;
+  
+  airline!: Partial<Airline>;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {
@@ -18,14 +23,6 @@ export class PlaneModel extends Model {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   static get relationMappings() {
     return {
-      plane_classes: {
-        relation: Model.HasManyRelation,
-        modelClass: PlaneClassModel,
-        join: {
-          from: 'planes.id',
-          to: 'plane_classes.plane_id'
-        }
-      },
       airline: {
         relation: Model.BelongsToOneRelation,
         modelClass: AirlineModel,

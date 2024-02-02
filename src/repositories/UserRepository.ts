@@ -1,7 +1,7 @@
 import { type User, UserModel } from '@models/UserModel';
 
 export class UserRepository {
-  public async getPersonalInformationByEmail(email: string): Promise<UserModel> {
+  public async getPersonalInformationByEmail(email: string): Promise<User> {
     return await UserModel.query()
       .select(
         'title',
@@ -18,7 +18,7 @@ export class UserRepository {
       .throwIfNotFound();
   }
 
-  public async updatePersonalInformationByEmail(email: string, user: Partial<User>): Promise<UserModel> {
+  public async updatePersonalInformationByEmail(email: string, user: Partial<User>): Promise<User> {
     return await UserModel.query()
       .patch(user)
       .where({
@@ -27,5 +27,16 @@ export class UserRepository {
       .returning('*')
       .first()
       .throwIfNotFound();
+  }
+
+  public async getUserIdByEmail(email: string): Promise<number> {
+    return (await UserModel.query()
+      .select('id')
+      .findOne({
+        email
+      })
+      .throwIfNotFound()
+    ).id;
+
   }
 }

@@ -10,7 +10,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('description', 500);
     table.specificType('eligible_payment_methods', 'VARCHAR(50)[]').notNullable();
     table.integer('maximum_discount').notNullable();
-    table.timestamp('expired_timestamp', { useTz: false });
+    table.timestamp('expired_time', { useTz: false });
   });
 }
 

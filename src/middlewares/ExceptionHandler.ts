@@ -144,7 +144,6 @@ export const exceptionHandler = (
       });
     } else {
       logger.error(err, `${req.method} ${req.url} : System Error`);
-      console.log(err)
       res.status(500).json({
         success: false,
         message: 'System Error',
