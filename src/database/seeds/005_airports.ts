@@ -33,7 +33,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       code: 'DPS',
-      name: 'I Gusti Ngurah Rai Internation Airport',
+      name: 'I Gusti Ngurah Rai International Airport',
       timezone: 8
     }
   ]);
