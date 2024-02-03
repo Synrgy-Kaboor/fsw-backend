@@ -24,7 +24,17 @@ export async function seed(knex: Knex): Promise<void> {
     {
       code: 'PDG',
       name: 'Minangkabau International Airport',
-      timezone: 8
+      timezone: 7
     },
+    {
+      code: 'MKQ',
+      name: 'Mopah Internation Airport',
+      timezone: 9
+    },
+    {
+      code: 'DPS',
+      name: 'I Gusti Ngurah Rai Internation Airport',
+      timezone: 8
+    }
   ]);
 }
