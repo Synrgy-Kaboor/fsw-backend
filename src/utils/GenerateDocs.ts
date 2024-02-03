@@ -12,8 +12,12 @@ const definition = {
   },
   servers: [
     {
+      url: 'https://fsw-backend.fly.dev',
+      description: 'Deployed Server'
+    },
+    {
       url: 'http://localhost:3000',
-      description: 'Development server',
+      description: 'Local Development Server',
     },
   ],
 };
