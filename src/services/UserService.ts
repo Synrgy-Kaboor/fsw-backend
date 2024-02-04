@@ -1,6 +1,6 @@
 import type { User } from '@models/UserModel';
 import { UserRepository } from '@repositories/UserRepository';
-import { SendMailJet, receipentEmail } from '@utils/sendMail';
+import { SendMailJet, type receipentEmail } from '@utils/sendMail';
 
 export class UserService {
   private readonly userRepository = new UserRepository();
@@ -57,5 +57,5 @@ export class UserService {
   public async verifyNoHp(email: string, otp: string): Promise<User> {
     return await this.userRepository.verifyNoHp(email, otp);
   }
-  
+
 }
