@@ -15,6 +15,6 @@ export default class FlightRoutes implements Routes {
 
   private initializeRoutes(): void {
     this.router.get(`${this.path}`, this.controller.getFlights);
-    this.router.patch(`${this.path}/:id`, this.controller.getFlight);
+    this.router.get(`${this.path}/:id`, this.controller.getFlight);
   }
 }

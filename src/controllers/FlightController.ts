@@ -46,6 +46,10 @@ interface IURLParams {
   id: number
 }
 
+interface IFlightByIdQuery {
+  classCode: string
+}
+
 export class FlightController {
   private readonly flightService = new FlightService();
 
@@ -116,7 +120,6 @@ export class FlightController {
         })
       }
 
-
       res.status(200).json(
         {
           code: 200,
@@ -131,15 +134,62 @@ export class FlightController {
   }
 
   public getFlight = async (
-    req: Request<IURLParams>,
+    req: Request<IURLParams, unknown, unknown, IFlightByIdQuery>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    if (!req.query.classCode) 
+    {
+      res.status(400).json({
+        code: 400,
+        message: 'Bad Request'
+      });
+      next();
+      return;
+    }
+
     try {
+      const flight = await this.flightService.getFlight(
+        req.params.id,
+        req.query.classCode
+      )
+
+      const responseData: IFlightBody = {
+        id: flight.id,
+        departureDatetime: flight.departure_date_time.toISOString(),
+        arrivalDatetime: flight.arrival_date_time.toISOString(),
+        plane: {
+          id: flight.plane.id,
+          code: flight.plane.code,
+          name: flight.plane.name,
+          airline: {
+            id: flight.plane.airline?.id,
+            name: flight.plane.airline?.name,
+            imageUrl: flight.plane.airline?.image_url
+          }
+        },
+        originAirport: {
+          id: flight.origin_airport.id,
+          code: flight.origin_airport.code,
+          name: flight.origin_airport.name,
+          timezone: flight.origin_airport.timezone
+        },
+        destinationAirport: {
+          id: flight.destination_airport.id,
+          code: flight.destination_airport.code,
+          name: flight.destination_airport.name,
+          timezone: flight.destination_airport.timezone
+        },
+        adultPrice: flight.flight_prices[0].adult_price,
+        childPrice: flight.flight_prices[0].child_price,
+        babyPrice: flight.flight_prices[0].baby_price
+      }
+
       res.status(200).json(
         {
           code: 200,
-          message: 'success'
+          message: 'success',
+          data: responseData
         }
       );
       next();

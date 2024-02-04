@@ -42,10 +42,13 @@ export class FlightRepository {
     return res;
   }
 
-  public async getFlight(id: number): Promise<Flight> {
+  public async getFlight(id: number, classCode: string): Promise<Flight> {
     return await FlightModel.query()
       .findById(id)
       .withGraphFetched('[plane.[airline], origin_airport, destination_airport, flight_prices]')
+      .modifyGraph('flight_prices', builder => {
+        void builder.where('class_code', classCode);
+      })
       .throwIfNotFound();
   }
 

@@ -24,7 +24,7 @@ export class FlightService {
     );
   }
 
-  public async getFlight(id: number): Promise<Flight> {
-    return await this.flightRepository.getFlight(id);
+  public async getFlight(id: number, classCode: string): Promise<Flight> {
+    return await this.flightRepository.getFlight(id, classCode);
   }
 }

@@ -33,7 +33,7 @@ export class BookingService {
 
     // Check if outbound flight is still available
     const outboundFlight = await this.flightRepository.getFlight(
-      booking.outbound_flight_id
+      booking.outbound_flight_id, booking.class_code
     );
     const numberOfBookedOutboundFlight = await this.bookingRepository.getNumberOfBookedSeats(
       booking.outbound_flight_id,
@@ -51,7 +51,7 @@ export class BookingService {
     if (booking.return_flight_id) {
       // Check if return flight is still available
       returnFlight = await this.flightRepository.getFlight(
-        booking.return_flight_id
+        booking.return_flight_id, booking.class_code
       );
       const numberOfBookedReturnFlight = await this.bookingRepository.getNumberOfBookedSeats(
         booking.return_flight_id,
