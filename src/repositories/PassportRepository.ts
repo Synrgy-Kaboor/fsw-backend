@@ -2,8 +2,14 @@ import { type Passport, PassportModel } from '@models/PassportModel';
 import { UserModel } from '@models/UserModel';
 
 export class PassportRepository {
-  public async createPassportByEmail(email: string, passport: Partial<Passport>): Promise<Passport> {
-    const user = await UserModel.query().where('email', email).first().throwIfNotFound();
+  public async createPassportByEmail(
+    email: string,
+    passport: Partial<Passport>,
+  ): Promise<Passport> {
+    const user = await UserModel.query()
+      .where('email', email)
+      .first()
+      .throwIfNotFound();
     passport.user_id = user.id;
     return await PassportModel.query().insertAndFetch(passport);
   }
@@ -15,13 +21,13 @@ export class PassportRepository {
       .throwIfNotFound();
     return await PassportModel.query()
       .select()
-      .where('user_id', user.id)
+      .where({ user_id: user.id, deleted_at: null })
       .throwIfNotFound();
   }
 
   public async getPassportById(idPassport: number): Promise<Passport> {
     return await PassportModel.query()
-      .where('id', idPassport)
+      .where({ id: idPassport, deleted_at: null })
       .first()
       .throwIfNotFound();
   }

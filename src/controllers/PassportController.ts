@@ -19,13 +19,97 @@ export class PassportController {
         created_at: new Date(),
       };
       const newPassport = await this.passportService.createPassportByEmail(
-        req.user.email, passport
+        req.user.email,
+        passport,
       );
       res.status(201).json({
         code: 201,
         message: 'success',
-        data: newPassport
-      })
+        data: { passport: newPassport },
+      });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  public getAllPassportByEmail = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const listPassport = await this.passportService.getAllPassportByEmail(
+        req.user.email,
+      );
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: {
+          passport: listPassport,
+        },
+      });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  public getPassportById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      if (req.params.id == '') {
+        res.status(400).json({
+          code: 400,
+          message: 'Passport id is required',
+        });
+      }
+      const id = parseInt(req.params.id);
+      const passport = await this.passportService.getPassportById(id);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: {
+          passport: passport,
+        },
+      });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  public updatePassportById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      if (req.params.id == '') {
+        res.status(400).json({
+          code: 400,
+          message: 'Passport id is required',
+        });
+      }
+      const id = parseInt(req.params.id);
+      const passport: Partial<Passport> = {
+        passport_number: req.body.passportNumber,
+        full_name: req.body.fullName,
+        expired_date: new Date(req.body.expiredDate),
+        nation: req.body.nation,
+        updated_at: new Date(),
+      };
+      const updatedPassport = await this.passportService.updatePassportById(
+        id,
+        passport,
+      );
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: {
+          passport: updatedPassport,
+        },
+      });
     } catch (e) {
       next(e);
     }
