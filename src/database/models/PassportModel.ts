@@ -4,7 +4,8 @@ export class PassportModel extends Model {
   id!: number;
   passport_number!: string;
   full_name!: string;
-  expired_date!: string;
+  expired_date!: Date;
+  nation!: string;
   created_at!: Date;
   updated_at!: Date;
   deleted_at!: Date;
