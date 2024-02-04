@@ -107,10 +107,7 @@ export class UserController {
   ): Promise<void> => {
     try {
       const userEmail: string = req.body.email;
-      const user = await this.userService.updateUserEmail(
-        req.user.email,
-        userEmail,
-      );
+      await this.userService.updateUserEmail(req.user.email, userEmail);
       res.status(200).json({
         code: 200,
         message: 'check otp in your email',
@@ -126,15 +123,15 @@ export class UserController {
   ): Promise<void> => {
     try {
       const otp: string = req.body.otp;
-      const user = await this.userService.verifyEmail(req.user.email, otp);
+      await this.userService.verifyEmail(req.user.email, otp);
       res.status(200).json({
         code: 200,
         message: 'success',
-      })
+      });
     } catch (e) {
-      next(e)
+      next(e);
     }
-  }
+  };
   public updateNoHp = async (
     req: Request<unknown, unknown, changeNoHpBody>,
     res: Response,
@@ -165,9 +162,9 @@ export class UserController {
       res.status(200).json({
         code: 200,
         message: 'success',
-      })
+      });
     } catch (e) {
-      next(e)
+      next(e);
     }
-  }
+  };
 }
