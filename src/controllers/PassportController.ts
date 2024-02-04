@@ -114,4 +114,27 @@ export class PassportController {
       next(e);
     }
   };
+
+  public deletePassportById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      if (req.params.id == '') {
+        res.status(400).json({
+          code: 400,
+          message: 'Passport id is required',
+        });
+      }
+      const id = parseInt(req.params.id);
+      await this.passportService.deletePassportById(id);
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+    } catch (e) {
+      next(e);
+    }
+  };
 }

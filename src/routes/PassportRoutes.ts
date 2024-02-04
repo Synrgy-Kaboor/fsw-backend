@@ -18,5 +18,6 @@ export default class PassportRoutes implements Routes {
         this.router.get(`${this.path}`, authenticateToken, this.controller.getAllPassportByEmail);
         this.router.get(`${this.path}/:id`, authenticateToken, this.controller.getPassportById);
         this.router.patch(`${this.path}/:id`, authenticateToken, this.controller.updatePassportById);
+        this.router.delete(`${this.path}/:id`, authenticateToken, this.controller.deletePassportById);
     }
   }

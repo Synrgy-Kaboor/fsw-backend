@@ -22,7 +22,6 @@ export class PassportRepository {
     return await PassportModel.query()
       .select()
       .where({ user_id: user.id, deleted_at: null })
-      .throwIfNotFound();
   }
 
   public async getPassportById(idPassport: number): Promise<Passport> {
@@ -47,7 +46,7 @@ export class PassportRepository {
   }
   public async deletePassportById(idPassport: number): Promise<Passport> {
     return await PassportModel.query()
-      .delete()
+      .patch({deleted_at: new Date()})
       .where({
         id: idPassport,
       })
