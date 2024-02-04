@@ -31,13 +31,27 @@ export class UserService {
     await SendMailJet(
       'ikhromax@gmail.com',
       [receipentEmail],
-      `Your OTP: ${user.email_otp}`,
+      `Your OTP for change email: ${user.email_otp}`,
     );
     return user;
   }
 
   public async verifyEmail(email: string, otp: string): Promise<User> {
     return await this.userRepository.verifyEmail(email, otp);
+  }
+
+  public async updateEmailOtp(email: string): Promise<User> {
+    const user = await this.userRepository.updateEmailOtpByEmail(email);
+    const receipentEmail: receipentEmail = {
+      Email: user.incoming_email_change,
+      Name: user.full_name,
+    }
+    await SendMailJet(
+      'ikhromax@gmail.com',
+      [receipentEmail],
+      `Your OTP for change email: ${user.email_otp}`,
+    )
+    return user;
   }
 
   public async updateUserNoHp(email: string, noHp: string): Promise<User> {
@@ -49,7 +63,7 @@ export class UserService {
     await SendMailJet(
       'ikhromax@gmail.com',
       [receipentEmail],
-      `Your OTP: ${user.nohp_otp}`,
+      `Your OTP for change number: ${user.nohp_otp}`,
     );
     return user;
   }
@@ -58,4 +72,17 @@ export class UserService {
     return await this.userRepository.verifyNoHp(email, otp);
   }
 
+  public async updateNoHpOtp(email: string): Promise<User> {
+    const user = await this.userRepository.updateNoHpOtpByEmail(email);
+    const receipentEmail: receipentEmail = {
+      Email: user.incoming_email_change,
+      Name: user.full_name,
+    }
+    await SendMailJet(
+      'ikhromax@gmail.com',
+      [receipentEmail],
+      `Your OTP for change number: ${user.nohp_otp}`,
+    )
+    return user;
+  }
 }

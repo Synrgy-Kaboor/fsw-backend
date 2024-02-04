@@ -19,7 +19,9 @@ export default class UserRoutes implements Routes {
     this.router.patch(`${this.path}`, authenticateToken, this.controller.updatePersonalInformation);
     this.router.patch(`${this.path}/email`, authenticateToken, this.controller.updateEmail);
     this.router.post(`${this.path}/email/otp/verify`, authenticateToken, this.controller.verifyEmail);
-    this.router.patch(`${this.path}/nohp`, authenticateToken, this.controller.updateNoHp);
-    this.router.post(`${this.path}/nohp/otp/verify`, authenticateToken, this.controller.verifyNoHp);
+    this.router.get(`${this.path}/email/otp/resend`, authenticateToken, this.controller.updateEmailOtp);
+    this.router.patch(`${this.path}/phone`, authenticateToken, this.controller.updateNoHp);
+    this.router.post(`${this.path}/phone/otp/verify`, authenticateToken, this.controller.verifyNoHp);
+    this.router.get(`${this.path}/phone/otp/resend`, authenticateToken, this.controller.updateNoHpOtp);
   }
 }
