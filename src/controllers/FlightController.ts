@@ -15,7 +15,7 @@ interface IFlightBody {
   id?: number;
   departureDatetime?: string;
   arrivalDatetime?: string;
-  plane?: {
+  plane: {
     id?: number,
     code?: string,
     name?: string,
@@ -25,9 +25,25 @@ interface IFlightBody {
       imageUrl?: string
     }
   },
+  originAirport: {
+    id?: number,
+    code?: string,
+    name?: string,
+    timezone?: number
+  },
+  destinationAirport: {
+    id?: number,
+    code?: string,
+    name?: string,
+    timezone?: number
+  }
   adultPrice?: number,
   childPrice?: number,
   babyPrice?: number
+}
+
+interface IURLParams {
+  id: number
 }
 
 export class FlightController {
@@ -82,6 +98,18 @@ export class FlightController {
               imageUrl: f.plane.airline?.image_url
             }
           },
+          originAirport: {
+            id: f.origin_airport.id,
+            code: f.origin_airport.code,
+            name: f.origin_airport.name,
+            timezone: f.origin_airport.timezone
+          },
+          destinationAirport: {
+            id: f.destination_airport.id,
+            code: f.destination_airport.code,
+            name: f.destination_airport.name,
+            timezone: f.destination_airport.timezone
+          },
           adultPrice: f.flight_prices[0].adult_price,
           childPrice: f.flight_prices[0].child_price,
           babyPrice: f.flight_prices[0].baby_price
@@ -103,7 +131,7 @@ export class FlightController {
   }
 
   public getFlight = async (
-    req: Request<unknown, unknown>,
+    req: Request<IURLParams>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {

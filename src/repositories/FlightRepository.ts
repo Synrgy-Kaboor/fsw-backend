@@ -26,7 +26,7 @@ export class FlightRepository {
       .andWhere('destination_airport_id', destinationAirportId)
       .andWhere('departure_date_time', '>=', minDate)
       .andWhere('departure_date_time', '<=', maxDate)
-      .withGraphFetched('[plane.[airline], flight_prices]')
+      .withGraphFetched('[plane.[airline], flight_prices, origin_airport, destination_airport]')
       .modifyGraph('flight_prices', builder => {
         void builder.where('class_code', classCode);
       }) as GetFlightsResult[];
