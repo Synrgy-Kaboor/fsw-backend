@@ -12,6 +12,7 @@ interface IPersonalInfoBody {
   city: string;
   address: string;
   isWni: boolean;
+  imageUrl: string;
 }
 
 interface changeEmailBody {
@@ -42,6 +43,7 @@ export class UserController {
         city: user.city,
         address: user.address,
         isWni: user.is_wni,
+        imageUrl: user.image_url
       };
 
       res.status(200).json({
@@ -88,6 +90,7 @@ export class UserController {
         city: user.city,
         address: user.address,
         isWni: user.is_wni,
+        imageUrl: user.image_url
       };
 
       res.status(200).json({
