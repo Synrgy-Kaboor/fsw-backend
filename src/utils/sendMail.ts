@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { join } from 'path';
 
-export interface receipentEmail {
+export type receipentEmail =  {
   Name: string;
   Email: string;
 }
