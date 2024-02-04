@@ -1,5 +1,7 @@
 import { Model, type ModelObject } from 'objection';
 import { type Booking, BookingModel } from './BookingModel';
+import { type Passport, PassportModel } from './PassportModel';
+import { type Notification, NotificationModel } from './NotificationModel';
 
 export class UserModel extends Model {
   id!: number;
@@ -30,6 +32,8 @@ export class UserModel extends Model {
   updated_at!: Date;
 
   bookings!: Array<Partial<Booking>>;
+  passports!: Array<Partial<Passport>>;
+  notifications!: Array<Partial<Notification>>;
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {
@@ -46,6 +50,22 @@ export class UserModel extends Model {
         join: {
           from: 'users.id',
           to: 'bookings.creator_id'
+        }
+      },
+      passports: {
+        relation: Model.HasManyRelation,
+        modelClass: PassportModel,
+        join: {
+          from: 'users.id',
+          to: 'passports.user_id'
+        }
+      },
+      notifications: {
+        relation: Model.HasManyRelation,
+        modelClass: NotificationModel,
+        join: {
+          from: 'users.id',
+          to: 'notifications.user_id'
         }
       }
     }
