@@ -6,6 +6,8 @@ import type { Router } from 'express';
  *      description: Airport resource endpoints
  *  -   name: Booking
  *      description: Booking and payment related endpoints
+ *  -   name: Flight
+ *      description: Flight resource endpoints
  *  -   name: User
  *      description: User resource endpoints
  * components:
