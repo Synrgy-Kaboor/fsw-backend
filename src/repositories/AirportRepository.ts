@@ -5,6 +5,14 @@ export class AirportRepository {
     return await AirportModel.query().select('*');
   }
 
+  public async getAirportByCode(code: string): Promise<Airport> {
+    return await AirportModel.query()
+      .findOne({
+        code
+      })
+      .throwIfNotFound();
+  }
+
   public async createAirport(airport: Partial<Airport>): Promise<void> {
     await AirportModel.query().insert(airport);
   }
