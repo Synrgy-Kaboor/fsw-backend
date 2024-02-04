@@ -13,6 +13,7 @@ export class PassportRepository {
     passport.user_id = user.id;
     return await PassportModel.query().insertAndFetch(passport);
   }
+  
   public async getAllPassportByEmail(email: string): Promise<Passport[]> {
     const user = await UserModel.query()
       .where('email', email)
@@ -44,6 +45,7 @@ export class PassportRepository {
       .first()
       .throwIfNotFound();
   }
+
   public async deletePassportById(idPassport: number): Promise<Passport> {
     return await PassportModel.query()
       .patch({deleted_at: new Date()})
