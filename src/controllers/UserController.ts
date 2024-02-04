@@ -18,6 +18,10 @@ interface changeEmailBody {
   email: string;
 }
 
+interface changeNoHpBody {
+  noHp: string;
+}
+
 export class UserController {
   private readonly userService = new UserService();
 
@@ -107,21 +111,63 @@ export class UserController {
         req.user.email,
         userEmail,
       );
-      const sendOtp = await fetch('https://kaboor-api-dev.up.railway.app/api/v1/auth/otp/resend', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user.email
-        })
-      })
       res.status(200).json({
         code: 200,
-        message: 'success',
+        message: 'check otp in your email',
       });
     } catch (e) {
       next(e);
     }
   };
+  public verifyEmail = async (
+    req: Request<unknown, unknown, { otp: string }>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const otp: string = req.body.otp;
+      const user = await this.userService.verifyEmail(req.user.email, otp);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+  public updateNoHp = async (
+    req: Request<unknown, unknown, changeNoHpBody>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const userNoHp: string = req.body.noHp;
+      const user = await this.userService.updateUserNoHp(
+        req.user.email,
+        userNoHp,
+      );
+      res.status(200).json({
+        code: 200,
+        message: 'check otp in your email',
+      });
+    } catch (e) {
+      next(e);
+    }
+  };
+  public verifyNoHp = async (
+    req: Request<unknown, unknown, { otp: string }>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const otp: string = req.body.otp;
+      const user = await this.userService.verifyNoHp(req.user.email, otp);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
 }
