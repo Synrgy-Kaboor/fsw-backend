@@ -11,7 +11,7 @@ const SendMailJet = async (
   fromEmail: string,
   receipentEmail: receipentEmail[],
   message: string,
-) => {
+): Promise<string|undefined> => {
   try {
     const bodyMessage = {
       From: {
@@ -34,7 +34,7 @@ const SendMailJet = async (
       },
       body: JSON.stringify({ Messages: [bodyMessage] }),
     });
-    return responseSend;
+    return "sended";
   } catch (error) {
     console.log(error);
   }

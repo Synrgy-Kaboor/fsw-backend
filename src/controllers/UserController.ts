@@ -139,10 +139,7 @@ export class UserController {
   ): Promise<void> => {
     try {
       const userNoHp: string = req.body.noHp;
-      const user = await this.userService.updateUserNoHp(
-        req.user.email,
-        userNoHp,
-      );
+      await this.userService.updateUserNoHp(req.user.email, userNoHp);
       res.status(200).json({
         code: 200,
         message: 'check otp in your email',
@@ -158,7 +155,7 @@ export class UserController {
   ): Promise<void> => {
     try {
       const otp: string = req.body.otp;
-      const user = await this.userService.verifyNoHp(req.user.email, otp);
+      await this.userService.verifyNoHp(req.user.email, otp);
       res.status(200).json({
         code: 200,
         message: 'success',
