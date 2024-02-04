@@ -43,6 +43,7 @@ export class UserRepository {
         .throwIfNotFound()
     ).id;
   }
+
   public async updateUserEmailByEmail(
     email: string,
     newEmail: string,
@@ -57,6 +58,7 @@ export class UserRepository {
       .first()
       .throwIfNotFound();
   }
+
   public async verifyEmail(email: string, otp: string): Promise<User> {
     const user = await UserModel.query()
       .findOne({ email, email_otp: otp })
@@ -72,6 +74,7 @@ export class UserRepository {
       .first()
       .throwIfNotFound();
   }
+
   public async updateUserNoHpByEmail(
     email: string,
     noHp: string,
@@ -86,6 +89,7 @@ export class UserRepository {
       .first()
       .throwIfNotFound();
   }
+
   public async verifyNoHp(email: string, otp: string): Promise<User> {
     const user = await UserModel.query()
       .findOne({ email, nohp_otp: otp })
@@ -101,4 +105,5 @@ export class UserRepository {
       .first()
       .throwIfNotFound();
   }
+  
 }

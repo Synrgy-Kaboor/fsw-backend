@@ -11,7 +11,7 @@ const SendMailJet = async (
   fromEmail: string,
   receipentEmail: receipentEmail[],
   message: string,
-): Promise<string|undefined> => {
+): Promise<string | undefined> => {
   try {
     const bodyMessage = {
       From: {
@@ -26,15 +26,15 @@ const SendMailJet = async (
     const encode = Buffer.from(
       `${process.env.MAILJET_API_KEY}:${process.env.MAILJET_SECRET_KEY}`,
     ).toString('base64');
-    const responseSend = await fetch('https://api.mailjet.com/v3.1/send', {
+    await fetch('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${encode}`,
+        Authorization: `Basic ${encode}`,
       },
       body: JSON.stringify({ Messages: [bodyMessage] }),
     });
-    return "sended";
+    return 'sended';
   } catch (error) {
     console.log(error);
   }

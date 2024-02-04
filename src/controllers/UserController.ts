@@ -100,6 +100,7 @@ export class UserController {
       next(e);
     }
   };
+
   public updateEmail = async (
     req: Request<unknown, unknown, changeEmailBody>,
     res: Response,
@@ -116,6 +117,7 @@ export class UserController {
       next(e);
     }
   };
+
   public verifyEmail = async (
     req: Request<unknown, unknown, { otp: string }>,
     res: Response,
@@ -132,6 +134,7 @@ export class UserController {
       next(e);
     }
   };
+
   public updateNoHp = async (
     req: Request<unknown, unknown, changeNoHpBody>,
     res: Response,
@@ -148,6 +151,7 @@ export class UserController {
       next(e);
     }
   };
+
   public verifyNoHp = async (
     req: Request<unknown, unknown, { otp: string }>,
     res: Response,
@@ -164,4 +168,5 @@ export class UserController {
       next(e);
     }
   };
+  
 }
