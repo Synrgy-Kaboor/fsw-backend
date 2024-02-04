@@ -66,7 +66,7 @@ export class PassportController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      if (req.params.id == '')
+      if (req.params.id === '')
         res.status(400).json({
           code: 400,
           message: 'Passport id is required',
@@ -78,7 +78,7 @@ export class PassportController {
         code: 200,
         message: 'success',
         data: {
-          passport: passport,
+          passport,
         },
       });
     } catch (e) {
@@ -92,7 +92,7 @@ export class PassportController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      if (req.params.id == '')
+      if (req.params.id === '')
         res.status(400).json({
           code: 400,
           message: 'Passport id is required',
@@ -128,7 +128,7 @@ export class PassportController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      if (req.params.id == '') {
+      if (req.params.id === '') {
         res.status(400).json({
           code: 400,
           message: 'Passport id is required',
