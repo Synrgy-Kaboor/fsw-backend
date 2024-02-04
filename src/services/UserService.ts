@@ -11,4 +11,7 @@ export class UserService {
   public async updatePersonalInformation(email: string, user: Partial<User>): Promise<User> {
     return await this.userRepository.updatePersonalInformationByEmail(email, user);
   }
+  public async updateUserEmail(email: string, newEmail: string): Promise<User> {
+    return await this.userRepository.updateUserEmailByEmail(email, newEmail);
+  }
 }

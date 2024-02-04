@@ -11,18 +11,22 @@ export class UserRepository {
         'nation',
         'city',
         'address',
-        'is_wni')
+        'is_wni',
+      )
       .findOne({
-        email
+        email,
       })
       .throwIfNotFound();
   }
 
-  public async updatePersonalInformationByEmail(email: string, user: Partial<User>): Promise<User> {
+  public async updatePersonalInformationByEmail(
+    email: string,
+    user: Partial<User>,
+  ): Promise<User> {
     return await UserModel.query()
       .patch(user)
       .where({
-        email
+        email,
       })
       .returning('*')
       .first()
@@ -30,13 +34,24 @@ export class UserRepository {
   }
 
   public async getUserIdByEmail(email: string): Promise<number> {
-    return (await UserModel.query()
-      .select('id')
-      .findOne({
-        email
-      })
-      .throwIfNotFound()
+    return (
+      await UserModel.query()
+        .select('id')
+        .findOne({
+          email,
+        })
+        .throwIfNotFound()
     ).id;
-
+  }
+  public async updateUserEmailByEmail(
+    email: string,
+    newEmail: string,
+  ): Promise<User> {
+    return await UserModel.query()
+      .patch({ email: newEmail })
+      .where({ email })
+      .returning('*')
+      .first()
+      .throwIfNotFound();
   }
 }

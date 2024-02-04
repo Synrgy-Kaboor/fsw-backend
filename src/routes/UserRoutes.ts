@@ -17,5 +17,6 @@ export default class UserRoutes implements Routes {
   private initializeRoutes(): void {
     this.router.get(`${this.path}`, authenticateToken, this.controller.getPersonalInformation);
     this.router.patch(`${this.path}`, authenticateToken, this.controller.updatePersonalInformation);
+    this.router.patch(`${this.path}/email`, authenticateToken, this.controller.updateEmail);
   }
 }
