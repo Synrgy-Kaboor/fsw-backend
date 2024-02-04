@@ -75,6 +75,17 @@ export class UserRepository {
       .throwIfNotFound();
   }
 
+  public async updateEmailOtpByEmail(email:string): Promise<User> {
+    return await UserModel.query()
+      .patch({
+        email_otp: `${Math.floor(Math.random() * 10000)}`,
+      })
+      .where({ email })
+      .returning('*')
+      .first()
+      .throwIfNotFound();
+  }
+
   public async updateUserNoHpByEmail(
     email: string,
     noHp: string,
@@ -101,6 +112,17 @@ export class UserRepository {
         nohp_otp: '',
       })
       .where({ email, nohp_otp: otp })
+      .returning('*')
+      .first()
+      .throwIfNotFound();
+  }
+
+  public async updateNoHpOtpByEmail(email:string): Promise<User> {
+    return await UserModel.query()
+      .patch({
+        nohp_otp: `${Math.floor(Math.random() * 10000)}`,
+      })
+      .where({ email })
       .returning('*')
       .first()
       .throwIfNotFound();

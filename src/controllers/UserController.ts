@@ -135,6 +135,22 @@ export class UserController {
     }
   };
 
+  public updateEmailOtp = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ):Promise<void> => {
+    try {
+      await this.userService.updateEmailOtp(req.user.email);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
   public updateNoHp = async (
     req: Request<unknown, unknown, changeNoHpBody>,
     res: Response,
@@ -168,5 +184,21 @@ export class UserController {
       next(e);
     }
   };
+
+  public updateNoHpOtp = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ):Promise<void> => {
+    try {
+      await this.userService.updateNoHpOtp(req.user.email);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
   
 }
