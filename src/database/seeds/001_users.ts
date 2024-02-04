@@ -17,6 +17,7 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Surabaya',
       address: 'Jl. Pramuka Raya 5, blok XX',
       is_wni: true,
+      role: 'USER'
     },
     {
       email: 'user2@gmail.com',
@@ -29,6 +30,7 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Surabaya',
       address: 'Jl. Budaya Raya 6, blok XX',
       is_wni: true,
+      role: 'USER'
     },
     {
       email: 'ignasiusf@gmail.com',
@@ -41,6 +43,8 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Penang',
       address: 'Jl. Ayam Raya 5, blok XX',
       is_wni: false,
+      verified: true,
+      role: 'USER'
     },
     {
       email: 'ikhromax@gmail.com',
@@ -53,6 +57,8 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Penang',
       address: 'Jl. Ayam Raya 5, blok XX',
       is_wni: false,
+      verified: true,
+      role: 'USER'
     },
   ]);
 }

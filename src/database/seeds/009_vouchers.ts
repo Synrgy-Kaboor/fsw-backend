@@ -16,7 +16,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       code: 'LIBURANBCA',
-      title: 'Diskon 100rb untuk Pemesanan Tiket',
+      title: 'Diskon 250rb untuk Pemesanan Tiket',
       description: 'Dapatkan diskonnya segera! Khusus Pelanggan BCA',
       eligible_payment_methods: ['BCA'],
       maximum_discount: 250000,
