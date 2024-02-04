@@ -10,6 +10,8 @@ import type { Router } from 'express';
  *      description: Flight resource endpoints
  *  -   name: User
  *      description: User resource endpoints
+ *  -   name: Voucher
+ *      description: Voucher resource endpoints
  * components:
  *    securitySchemes:
  *      bearerAuth:
