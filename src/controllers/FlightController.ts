@@ -89,34 +89,34 @@ export class FlightController {
 
       for (const f of flights) {
         responseData.push({
-          id: f.id,
+          id: Number(f.id),
           departureDatetime: f.departure_date_time.toISOString(),
           arrivalDatetime: f.arrival_date_time.toISOString(),
           plane: {
-            id: f.plane.id,
+            id: Number(f.plane.id),
             code: f.plane.code,
             name: f.plane.name,
             airline: {
-              id: f.plane.airline?.id,
+              id: Number(f.plane.airline?.id),
               name: f.plane.airline?.name,
               imageUrl: f.plane.airline?.image_url
             }
           },
           originAirport: {
-            id: f.origin_airport.id,
+            id: Number(f.origin_airport.id),
             code: f.origin_airport.code,
             name: f.origin_airport.name,
-            timezone: f.origin_airport.timezone
+            timezone: Number(f.origin_airport.timezone)
           },
           destinationAirport: {
-            id: f.destination_airport.id,
+            id: Number(f.destination_airport.id),
             code: f.destination_airport.code,
             name: f.destination_airport.name,
-            timezone: f.destination_airport.timezone
+            timezone: Number(f.destination_airport.timezone)
           },
-          adultPrice: f.flight_prices[0].adult_price,
-          childPrice: f.flight_prices[0].child_price,
-          babyPrice: f.flight_prices[0].baby_price
+          adultPrice: Number(f.flight_prices[0].adult_price),
+          childPrice: Number(f.flight_prices[0].child_price),
+          babyPrice: Number(f.flight_prices[0].baby_price)
         })
       }
 
@@ -155,34 +155,34 @@ export class FlightController {
       )
 
       const responseData: IFlightBody = {
-        id: flight.id,
+        id: Number(flight.id),
         departureDatetime: flight.departure_date_time.toISOString(),
         arrivalDatetime: flight.arrival_date_time.toISOString(),
         plane: {
-          id: flight.plane.id,
+          id: Number(flight.plane.id),
           code: flight.plane.code,
           name: flight.plane.name,
           airline: {
-            id: flight.plane.airline?.id,
+            id: Number(flight.plane.airline?.id),
             name: flight.plane.airline?.name,
             imageUrl: flight.plane.airline?.image_url
           }
         },
         originAirport: {
-          id: flight.origin_airport.id,
+          id: Number(flight.origin_airport.id),
           code: flight.origin_airport.code,
           name: flight.origin_airport.name,
-          timezone: flight.origin_airport.timezone
+          timezone: Number(flight.origin_airport.timezone)
         },
         destinationAirport: {
-          id: flight.destination_airport.id,
+          id: Number(flight.destination_airport.id),
           code: flight.destination_airport.code,
           name: flight.destination_airport.name,
-          timezone: flight.destination_airport.timezone
+          timezone: Number(flight.destination_airport.timezone)
         },
-        adultPrice: flight.flight_prices[0].adult_price,
-        childPrice: flight.flight_prices[0].child_price,
-        babyPrice: flight.flight_prices[0].baby_price
+        adultPrice: Number(flight.flight_prices[0].adult_price),
+        childPrice: Number(flight.flight_prices[0].child_price),
+        babyPrice: Number(flight.flight_prices[0].baby_price)
       }
 
       res.status(200).json(
