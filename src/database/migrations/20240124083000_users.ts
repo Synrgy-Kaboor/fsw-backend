@@ -22,6 +22,12 @@ export async function up(knex: Knex): Promise<void> {
     table.string('city', 255);
     table.string('address', 255);
     table.boolean('is_wni');
+    table.string('incoming_email_change', 255);
+    table.string('email_otp', 255);
+    table.string('incoming_nohp_change', 255);
+    table.string('nohp_otp', 255);
+    table.string('nik', 255);
+    table.string('image_url', 1000);
     table.timestamps(true, true);
   });
 }

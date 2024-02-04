@@ -20,6 +20,12 @@ export class UserModel extends Model {
   city!: string;
   address!: string;
   is_wni!: boolean;
+  incoming_email_change!: string;
+  email_otp!: string;
+  incoming_nohp_change!: string;
+  nik!: string;
+  image_url!: string;
+  nohp_otp!: string;
   created_at!: Date;
   updated_at!: Date;
 

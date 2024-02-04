@@ -16,7 +16,7 @@ export async function seed(knex: Knex): Promise<void> {
       nation: 'Indonesia',
       city: 'Surabaya',
       address: 'Jl. Pramuka Raya 5, blok XX',
-      is_wni: true
+      is_wni: true,
     },
     {
       email: 'user2@gmail.com',
@@ -28,7 +28,7 @@ export async function seed(knex: Knex): Promise<void> {
       nation: 'Indonesia',
       city: 'Surabaya',
       address: 'Jl. Budaya Raya 6, blok XX',
-      is_wni: true
+      is_wni: true,
     },
     {
       email: 'ignasiusf@gmail.com',
@@ -40,7 +40,19 @@ export async function seed(knex: Knex): Promise<void> {
       nation: 'Malaysia',
       city: 'Penang',
       address: 'Jl. Ayam Raya 5, blok XX',
-      is_wni: false
+      is_wni: false,
+    },
+    {
+      email: 'ikhromax@gmail.com',
+      password: '$2a$10$7vRblTPSgUIFK2UeDc/M.uMfL/6S6oHpVD1i6uPL1/kyVOKaU3092',
+      title: 'Ms',
+      full_name: 'Testing Backend',
+      gender: 'P',
+      birth_day: new Date(1989, 2, 21),
+      nation: 'Malaysia',
+      city: 'Penang',
+      address: 'Jl. Ayam Raya 5, blok XX',
+      is_wni: false,
     },
   ]);
 }
