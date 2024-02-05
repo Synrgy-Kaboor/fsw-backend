@@ -1,4 +1,5 @@
 import { PM_ACCOUNT_NUMBERS } from '@constants/pmAccountNumbers';
+import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import { type Booking } from '@models/BookingModel';
 import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
@@ -40,6 +41,10 @@ interface IPaymentStatusBody {
   paymentCompleted?: boolean;
   paymentDateTime?: string;
   invoiceNumber?: string;
+}
+
+interface IProofOfPaymentBody {
+  fileName: string;
 }
 
 export class BookingController {
@@ -132,7 +137,11 @@ export class BookingController {
         expiredTime: booking.payment.expired_time?.toISOString()
       };
 
-      res.status(200).json(responseData);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: responseData
+      });
     } catch (e) {
       next(e);
     }
@@ -155,7 +164,53 @@ export class BookingController {
         invoiceNumber: booking.payment.invoice_number
       };
 
-      res.status(200).json(responseData);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: responseData
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public uploadProofOfPaymentFile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      if (!req.file) {
+        throw new NoFileReceivedException();
+      }
+
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: {
+          fileName: req.file.filename,
+          fileUrl: `${process.env.BACKEND_URL}/payment/file/${req.file.filename}`
+        }
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public submitProofOfPayment = async (
+    req: Request<IURLParams, unknown, IProofOfPaymentBody>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      await this.bookingService.addProofOfPaymentFilename(Number(req.params.id), req.body.fileName);
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
     } catch (e) {
       next(e);
     }
