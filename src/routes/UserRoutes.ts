@@ -132,7 +132,7 @@ export default class UserRoutes implements Routes {
      *                format: binary
      *    responses:
      *      '200':
-     *        description: Modify user personal data success
+     *        description: Upload profile image success
      *        content:
      *          application/json:
      *            schema:
