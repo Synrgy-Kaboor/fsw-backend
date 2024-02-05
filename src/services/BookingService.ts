@@ -96,6 +96,11 @@ export class BookingService {
   }
 
 
+  public async addProofOfPaymentFilename(id: number, filename: string): Promise<void> {
+    await this.bookingRepository.addProofOfPaymentFilename(id, filename);
+  }
+
+
   private getCapacity(plane: Partial<Plane>, classCode: string): number {
     switch(classCode) {
       case 'E': 

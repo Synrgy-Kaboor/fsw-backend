@@ -20,5 +20,6 @@ export default class BookingRoutes implements Routes {
     this.router.get(`${this.path}/:id(\\d+)/payment`, authenticateToken, this.controller.getPaymentDetails);
     this.router.get(`${this.path}/:id(\\d+)/status`, authenticateToken, this.controller.getBookingStatus);
     this.router.post(`${this.path}/payment/file`, authenticateToken, paymentFileUpload.single('file'), this.controller.uploadProofOfPaymentFile);
+    this.router.patch(`${this.path}/:id(\\d+)/payment/proof`, authenticateToken, this.controller.submitProofOfPayment);
   }
 }

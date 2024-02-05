@@ -43,6 +43,10 @@ interface IPaymentStatusBody {
   invoiceNumber?: string;
 }
 
+interface IProofOfPaymentBody {
+  fileName: string;
+}
+
 export class BookingController {
   private readonly bookingService = new BookingService();
 
@@ -133,7 +137,11 @@ export class BookingController {
         expiredTime: booking.payment.expired_time?.toISOString()
       };
 
-      res.status(200).json(responseData);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: responseData
+      });
     } catch (e) {
       next(e);
     }
@@ -156,7 +164,11 @@ export class BookingController {
         invoiceNumber: booking.payment.invoice_number
       };
 
-      res.status(200).json(responseData);
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: responseData
+      });
     } catch (e) {
       next(e);
     }
@@ -173,9 +185,32 @@ export class BookingController {
       }
 
       res.status(200).json({
-        fileName: req.file.filename,
-        fileUrl: `${process.env.BACKEND_URL}/payment/file/${req.file.filename}`
+        code: 200,
+        message: 'success',
+        data: {
+          fileName: req.file.filename,
+          fileUrl: `${process.env.BACKEND_URL}/payment/file/${req.file.filename}`
+        }
       });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public submitProofOfPayment = async (
+    req: Request<IURLParams, unknown, IProofOfPaymentBody>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      await this.bookingService.addProofOfPaymentFilename(Number(req.params.id), req.body.fileName);
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
     } catch (e) {
       next(e);
     }
