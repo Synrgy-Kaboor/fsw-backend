@@ -38,8 +38,12 @@ export class App {
 
     // Static routes
     this.app.use(
-      '/cars/image',
-      express.static(join(__dirname, '..', 'storage', 'cars')),
+      '/user/image',
+      express.static(join(__dirname, '..', 'storage', 'profile')),
+    );
+    this.app.use(
+      '/payment/file',
+      express.static(join(__dirname, '..', 'storage', 'payment')),
     );
     this.app.use('/', express.static(join(__dirname, '..', 'public')));
 

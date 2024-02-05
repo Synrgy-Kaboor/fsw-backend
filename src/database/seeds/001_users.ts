@@ -44,7 +44,8 @@ export async function seed(knex: Knex): Promise<void> {
       address: 'Jl. Ayam Raya 5, blok XX',
       is_wni: false,
       verified: true,
-      role: 'USER'
+      role: 'USER',
+      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png'
     },
     {
       email: 'ikhromax@gmail.com',
