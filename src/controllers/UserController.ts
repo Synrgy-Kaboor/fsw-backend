@@ -14,6 +14,7 @@ interface IPersonalInfoBody {
   address: string;
   isWni: boolean;
   imageName: string;
+  nik: string;
   imageUrl?: string;
 }
 
@@ -41,6 +42,7 @@ export class UserController {
         fullName: user.full_name,
         gender: user.gender,
         birthday: user.birth_day ? dateToString(user.birth_day) : '',
+        nik: user.nik,
         nation: user.nation,
         city: user.city,
         address: user.address,
@@ -70,6 +72,7 @@ export class UserController {
         title: req.body.title,
         full_name: req.body.fullName,
         gender: req.body.gender,
+        nik: req.body.nik,
         birth_day: req.body.birthday
           ? stringToDate(req.body.birthday)
           : undefined,
@@ -77,6 +80,7 @@ export class UserController {
         city: req.body.city,
         address: req.body.address,
         is_wni: req.body.isWni,
+        image_name: req.body.imageName
       };
 
       const user = await this.userService.updatePersonalInformation(
@@ -89,6 +93,7 @@ export class UserController {
         fullName: user.full_name,
         gender: user.gender,
         birthday: user.birth_day ? dateToString(user.birth_day) : '',
+        nik: user.nik,
         nation: user.nation,
         city: user.city,
         address: user.address,
