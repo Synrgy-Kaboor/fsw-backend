@@ -63,7 +63,7 @@ export class UserService {
     await SendMailJet(
       'ikhromax@gmail.com',
       [receipentEmail],
-      `Your OTP for change number: ${user.nohp_otp}`,
+      `Your OTP for change phone number: ${user.nohp_otp}`,
     );
     return user;
   }
@@ -81,7 +81,7 @@ export class UserService {
     await SendMailJet(
       'ikhromax@gmail.com',
       [receipentEmail],
-      `Your OTP for change number: ${user.nohp_otp}`,
+      `Your OTP for change phone number: ${user.nohp_otp}`,
     )
     return user;
   }
