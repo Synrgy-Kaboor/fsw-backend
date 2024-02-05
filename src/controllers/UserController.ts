@@ -1,3 +1,4 @@
+import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import type { User } from '@models/UserModel';
 import { UserService } from '@services/UserService';
 import { dateToString, stringToDate } from '@utils/dateUtils';
@@ -12,6 +13,8 @@ interface IPersonalInfoBody {
   city: string;
   address: string;
   isWni: boolean;
+  imageName: string;
+  imageUrl?: string;
 }
 
 interface changeEmailBody {
@@ -42,6 +45,8 @@ export class UserController {
         city: user.city,
         address: user.address,
         isWni: user.is_wni,
+        imageName: user.image_name,
+        imageUrl: `${process.env.BACKEND_URL}/user/image/${user.image_name}`
       };
 
       res.status(200).json({
@@ -88,6 +93,7 @@ export class UserController {
         city: user.city,
         address: user.address,
         isWni: user.is_wni,
+        imageName: user.image_name
       };
 
       res.status(200).json({
@@ -100,6 +106,25 @@ export class UserController {
       next(e);
     }
   };
+
+  public addProfileImage = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      if (!req.file) {
+        throw new NoFileReceivedException();
+      }
+
+      res.status(200).json({
+        imageName: req.file.filename,
+        imageUrl: `${process.env.BACKEND_URL}/user/image/${req.file.filename}`
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 
   public updateEmail = async (
     req: Request<unknown, unknown, changeEmailBody>,

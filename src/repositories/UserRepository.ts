@@ -12,6 +12,7 @@ export class UserRepository {
         'city',
         'address',
         'is_wni',
+        'image_name'
       )
       .findOne({
         email,

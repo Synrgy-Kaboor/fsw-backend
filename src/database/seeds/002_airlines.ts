@@ -8,15 +8,15 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('airlines').insert([
     {
       name: 'Garuda Indonesia',
-      image_url: 'https://fsw-backend.fly.dev/airlines/image/garuda_indonesia.png'
+      image_url: 'https://fsw-backend.fly.dev/garuda-indonesia.png'
     },
     {
       name: 'Air Asia',
-      image_url: 'https://fsw-backend.fly.dev/airlines/image/air_asia.png'
+      image_url: 'https://fsw-backend.fly.dev/air-asia.png'
     },
     {
       name: 'Citilink',
-      image_url: 'https://fsw-backend.fly.dev/airlines/image/citilink.png'
+      image_url: 'https://fsw-backend.fly.dev/citilink.png'
     },
   ]);
 }
