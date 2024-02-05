@@ -377,6 +377,12 @@ export default class BookingRoutes implements Routes {
      *        title:
      *          type: string
      *          example: 'Mr'
+     *        phoneNumber:
+     *          type: string
+     *          example: '024839283742'
+     *        email:
+     *          type: string
+     *          example: 'xxx@gmail.com'
      *    Passenger:
      *      type: object
      *      properties:
@@ -386,12 +392,6 @@ export default class BookingRoutes implements Routes {
      *        title:
      *          type: string
      *          example: 'Mr'
-     *        phoneNumber:
-     *          type: string
-     *          example: '024839283742'
-     *        email:
-     *          type: string
-     *          example: 'xxx@gmail.com'
      */
   }
 }
