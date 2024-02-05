@@ -1,4 +1,5 @@
 import { PM_ACCOUNT_NUMBERS } from '@constants/pmAccountNumbers';
+import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import { type Booking } from '@models/BookingModel';
 import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
@@ -156,6 +157,25 @@ export class BookingController {
       };
 
       res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public uploadProofOfPaymentFile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      if (!req.file) {
+        throw new NoFileReceivedException();
+      }
+
+      res.status(200).json({
+        fileName: req.file.filename,
+        fileUrl: `${process.env.BACKEND_URL}/payment/file/${req.file.filename}`
+      });
     } catch (e) {
       next(e);
     }
