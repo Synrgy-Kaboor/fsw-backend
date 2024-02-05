@@ -195,6 +195,9 @@ export default class UserRoutes implements Routes {
      *        birthday:
      *          type: string
      *          example: '1989-21-21'
+     *        nik:
+     *          type: string
+     *          example: '242432439384'
      *        nation:
      *          type: string
      *          example: 'Indonesia'
@@ -228,6 +231,9 @@ export default class UserRoutes implements Routes {
      *        birthday:
      *          type: string
      *          example: '1989-21-21'
+     *        nik:
+     *          type: string
+     *          example: '242432439384'
      *        nation:
      *          type: string
      *          example: 'Indonesia'

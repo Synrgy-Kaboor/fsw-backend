@@ -7,6 +7,7 @@ export class UserRepository {
         'title',
         'full_name',
         'gender',
+        'nik',
         'birth_day',
         'nation',
         'city',
