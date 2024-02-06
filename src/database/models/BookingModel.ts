@@ -17,6 +17,7 @@ export class BookingModel extends Model {
   add_delay_protection!: boolean;
   proof_of_payment_file_name!: string;
   ticket_file_name!: string;
+  booking_code!: string;
 
   outbound_flight_id!: number;
   return_flight_id!: number;
