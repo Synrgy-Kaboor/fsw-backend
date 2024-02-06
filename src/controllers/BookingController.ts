@@ -215,4 +215,22 @@ export class BookingController {
       next(e);
     }
   }
+
+  public approvePayment = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      await this.bookingService.approvePayment(req.params.id);
+      
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+    } catch (e) {
+      next(e);
+    }
+
+  }
 }

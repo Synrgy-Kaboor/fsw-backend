@@ -393,5 +393,7 @@ export default class BookingRoutes implements Routes {
      *          type: string
      *          example: 'Mr'
      */
+
+    this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateToken, this.controller.approvePayment);
   }
 }
