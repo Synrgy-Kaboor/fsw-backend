@@ -43,4 +43,13 @@ export class BookingRepository {
       .where('creator_id', userId)
       .withGraphFetched('payment');
   }
+
+  public async addProofOfPaymentFilename(id: number, filename: string): Promise<void> {
+    await BookingModel.query()
+      .findById(id)
+      .patch({
+        proof_of_payment_file_name: filename
+      })
+      .throwIfNotFound();
+  }
 }

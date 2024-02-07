@@ -126,7 +126,7 @@ export default class FlightRoutes implements Routes {
      *              type: object
      *              $ref: '#/components/schemas/Flight'
      */
-    this.router.get(`${this.path}/:id`, this.controller.getFlight);
+    this.router.get(`${this.path}/:id(\\d+)`, this.controller.getFlight);
 
     // Schemas
     /**

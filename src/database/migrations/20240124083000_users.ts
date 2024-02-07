@@ -27,7 +27,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('incoming_nohp_change', 255);
     table.string('nohp_otp', 255);
     table.string('nik', 255);
-    table.string('image_url', 1000);
+    table.string('image_name', 255);
     table.timestamps(true, true);
   });
 }

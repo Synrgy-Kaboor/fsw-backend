@@ -17,6 +17,7 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Surabaya',
       address: 'Jl. Pramuka Raya 5, blok XX',
       is_wni: true,
+      role: 'USER'
     },
     {
       email: 'user2@gmail.com',
@@ -29,6 +30,7 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Surabaya',
       address: 'Jl. Budaya Raya 6, blok XX',
       is_wni: true,
+      role: 'USER'
     },
     {
       email: 'ignasiusf@gmail.com',
@@ -41,6 +43,9 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Penang',
       address: 'Jl. Ayam Raya 5, blok XX',
       is_wni: false,
+      verified: true,
+      role: 'USER',
+      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png'
     },
     {
       email: 'ikhromax@gmail.com',
@@ -53,6 +58,24 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Penang',
       address: 'Jl. Ayam Raya 5, blok XX',
       is_wni: false,
+      verified: true,
+      role: 'USER'
     },
+    {
+      email: 'agungoop24@gmail.com',
+      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
+      title: 'Mr',
+      full_name: 'Agung Kusuma',
+      gender: 'P',
+      nik: '535823839482',
+      birth_day: new Date(1989, 2, 21),
+      nation: 'Indonesia',
+      city: 'Batam',
+      address: 'Jl. Ayam Raya 5, blok XX',
+      is_wni: false,
+      verified: true,
+      role: 'USER',
+      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png'
+    }
   ]);
 }

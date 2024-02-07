@@ -1,3 +1,4 @@
+import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import type { User } from '@models/UserModel';
 import { UserService } from '@services/UserService';
 import { dateToString, stringToDate } from '@utils/dateUtils';
@@ -12,6 +13,9 @@ interface IPersonalInfoBody {
   city: string;
   address: string;
   isWni: boolean;
+  imageName: string;
+  nik: string;
+  imageUrl?: string;
 }
 
 interface changeEmailBody {
@@ -38,10 +42,13 @@ export class UserController {
         fullName: user.full_name,
         gender: user.gender,
         birthday: user.birth_day ? dateToString(user.birth_day) : '',
+        nik: user.nik,
         nation: user.nation,
         city: user.city,
         address: user.address,
         isWni: user.is_wni,
+        imageName: user.image_name,
+        imageUrl: `${process.env.BACKEND_URL}/user/image/${user.image_name}`
       };
 
       res.status(200).json({
@@ -65,6 +72,7 @@ export class UserController {
         title: req.body.title,
         full_name: req.body.fullName,
         gender: req.body.gender,
+        nik: req.body.nik,
         birth_day: req.body.birthday
           ? stringToDate(req.body.birthday)
           : undefined,
@@ -72,6 +80,7 @@ export class UserController {
         city: req.body.city,
         address: req.body.address,
         is_wni: req.body.isWni,
+        image_name: req.body.imageName
       };
 
       const user = await this.userService.updatePersonalInformation(
@@ -84,10 +93,12 @@ export class UserController {
         fullName: user.full_name,
         gender: user.gender,
         birthday: user.birth_day ? dateToString(user.birth_day) : '',
+        nik: user.nik,
         nation: user.nation,
         city: user.city,
         address: user.address,
         isWni: user.is_wni,
+        imageName: user.image_name
       };
 
       res.status(200).json({
@@ -100,6 +111,25 @@ export class UserController {
       next(e);
     }
   };
+
+  public addProfileImage = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      if (!req.file) {
+        throw new NoFileReceivedException();
+      }
+
+      res.status(200).json({
+        imageName: req.file.filename,
+        imageUrl: `${process.env.BACKEND_URL}/user/image/${req.file.filename}`
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 
   public updateEmail = async (
     req: Request<unknown, unknown, changeEmailBody>,

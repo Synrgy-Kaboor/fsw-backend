@@ -26,7 +26,7 @@ export class UserModel extends Model {
   email_otp!: string;
   incoming_nohp_change!: string;
   nik!: string;
-  image_url!: string;
+  image_name!: string;
   nohp_otp!: string;
   created_at!: Date;
   updated_at!: Date;

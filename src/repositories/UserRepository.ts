@@ -7,11 +7,13 @@ export class UserRepository {
         'title',
         'full_name',
         'gender',
+        'nik',
         'birth_day',
         'nation',
         'city',
         'address',
         'is_wni',
+        'image_name'
       )
       .findOne({
         email,
