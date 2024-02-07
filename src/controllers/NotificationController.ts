@@ -4,11 +4,11 @@ import type { NextFunction, Request, Response } from 'express';
 export class NotificationController {
   private readonly notificationService = new NotificationService();
 
-  public async getNotificationByEmail(
+  public getNotificationByEmail = async (
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<void> {
+  ): Promise<void> => {
     try {
       const notification =
         await this.notificationService.getNotificationByEmail(req.user.email);
@@ -22,11 +22,11 @@ export class NotificationController {
     }
   }
 
-  public async markReadNotificationById(
+  public markReadNotificationById = async (
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<void> {
+  ): Promise<void> =>  {
     try {
       await this.notificationService.markReadNotificationById(
         Number(req.params.id),
@@ -40,9 +40,9 @@ export class NotificationController {
     }
   }
 
-  public async deleteNotificationById(
+  public deleteNotificationById = async (
     req: Request, res: Response, next: NextFunction,
-  ): Promise<void> {
+  ): Promise<void> => {
     try {
       await this.notificationService.deleteNotificationById(
         Number(req.params.id),
