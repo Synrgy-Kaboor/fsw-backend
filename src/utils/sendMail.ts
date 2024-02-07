@@ -8,15 +8,14 @@ export interface receipentEmail {
 
 dotenv.config({ path: join(__dirname, '..', '..', '.env') });
 const SendMailJet = async (
-  fromEmail: string,
   receipentEmail: receipentEmail[],
   message: string,
 ): Promise<string | undefined> => {
   try {
     const bodyMessage = {
       From: {
-        Email: fromEmail,
-        Name: 'FinProBinar',
+        Email: process.env.MAILJET_BINAR_KABOOR,
+        Name: 'Kaboor',
       },
       To: receipentEmail,
       Subject: 'Email From Kaboor',
