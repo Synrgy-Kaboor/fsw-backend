@@ -16,8 +16,84 @@ export default class BookingRoutes implements Routes {
   }
 
   private initializeRoutes(): void {
+    /**
+     * @openapi
+     * /api/v1/booking/{id}/outbound/ticket:
+     *  get:
+     *    summary: Download outbound flight ticket pdf of a booking
+     *    description: Download outbound flight ticket pdf of a booking
+     *    tags: [Booking]
+     *    produces:
+     *      - application/json
+     *    security: 
+     *      - bearerAuth: []
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        schema:
+     *          type: integer
+     *          example: 1
+     *        description: Booking ID
+     *    responses:
+     *      '200':
+     *        description: Get payment details success
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
     this.router.get(`${this.path}/:id(\\d+)/outbound/ticket`, authenticateToken, this.controller.downloadOutboundTicket);
+
+    /**
+     * @openapi
+     * /api/v1/booking/{id}/return/ticket:
+     *  get:
+     *    summary: Download outbound flight ticket pdf of a booking
+     *    description: Download outbound flight ticket pdf of a booking
+     *    tags: [Booking]
+     *    produces:
+     *      - application/json
+     *    security: 
+     *      - bearerAuth: []
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        schema:
+     *          type: integer
+     *          example: 1
+     *        description: Booking ID
+     *    responses:
+     *      '200':
+     *        description: Get payment details success
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
     this.router.get(`${this.path}/:id(\\d+)/return/ticket`, authenticateToken, this.controller.downloadReturnTicket);
+    
     /**
      * @openapi
      * /api/v1/booking:
