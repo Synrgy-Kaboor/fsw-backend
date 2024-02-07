@@ -50,6 +50,57 @@ interface IProofOfPaymentBody {
 export class BookingController {
   private readonly bookingService = new BookingService();
 
+  public getBookingsOfUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public getBookingOutboundData = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public getBookingReturnData = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
   public createBooking = async (
     req: Request<unknown, unknown, ICreateBookingRequestBody>,
     res: Response,
@@ -233,4 +284,38 @@ export class BookingController {
     }
 
   }
+
+  public downloadOutboundTicket = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public downloadReturnTicket = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
 }

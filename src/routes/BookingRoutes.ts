@@ -16,6 +16,10 @@ export default class BookingRoutes implements Routes {
   }
 
   private initializeRoutes(): void {
+    this.router.get(`${this.path}`, authenticateToken, this.controller.getBookingsOfUser);
+    this.router.get(`${this.path}/:id(\\d+)/outbound`, authenticateToken, this.controller.getBookingOutboundData);
+    this.router.get(`${this.path}/:id(\\d+)/return`, authenticateToken, this.controller.getBookingOutboundData);
+
     /**
      * @openapi
      * /api/v1/booking:
@@ -327,7 +331,7 @@ export default class BookingRoutes implements Routes {
      */
     this.router.patch(`${this.path}/:id(\\d+)/payment/proof`, authenticateToken, this.controller.submitProofOfPayment);
 
-        /**
+    /**
      * @openapi
      * /api/v1/booking/{id}/payment/approve:
      *  post:
@@ -383,6 +387,9 @@ export default class BookingRoutes implements Routes {
      *              $ref: '#/components/schemas/ConstraintViolationError'
      */
     this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateToken, this.controller.approvePayment);
+
+    this.router.get(`${this.path}/:id(\\d+)/outbound/ticket`, authenticateToken, this.controller.downloadOutboundTicket);
+    this.router.get(`${this.path}/:id(\\d+)/return/ticket`, authenticateToken, this.controller.downloadReturnTicket);
 
     // Schemas
     /**
