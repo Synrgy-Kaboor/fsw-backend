@@ -16,7 +16,8 @@ export class BookingModel extends Model {
   add_baggage_insurance!: boolean;
   add_delay_protection!: boolean;
   proof_of_payment_file_name!: string;
-  ticket_file_name!: string;
+  outbound_ticket_file_name!: string;
+  return_ticket_file_name!: string;
   booking_code!: string;
 
   outbound_flight_id!: number;

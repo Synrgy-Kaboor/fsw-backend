@@ -15,6 +15,8 @@ import Handlebars from 'handlebars';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
+import { randomUUID } from 'crypto';
+import SubmissionLimitException from '@exceptions/SubmissionLimitException';
 
 interface ITiketProps {
   airlineImageUrl?: string;
@@ -123,6 +125,15 @@ export class BookingService {
 
 
   public async addProofOfPaymentFilename(id: number, filename: string): Promise<void> {
+    // Get booking with corresponding id
+    const booking = await this.bookingRepository.getBooking(id);
+
+    // Check if proof of payment exists and payment has not been completed
+    if (booking.proof_of_payment_file_name || booking.payment.payment_completed) {
+      throw new SubmissionLimitException();
+    }
+
+    // Add proof of payment filename
     await this.bookingRepository.addProofOfPaymentFilename(id, filename);
   }
 
@@ -132,9 +143,12 @@ export class BookingService {
     const booking = await this.bookingRepository.getBooking(id);
 
     // Check if proof of payment exists and payment has not been completed
+    if (!booking.proof_of_payment_file_name || booking.payment.payment_completed) {
+      throw new SubmissionLimitException();
+    }
 
-    // Setup PDF properties for outboundFlight
-    const outboundPdfProps: ITiketProps = {
+    // Setup PDF properties for outbound flight
+    const outboundTicketProps: ITiketProps = {
       airlineImageUrl: booking.outbound_flight.plane?.airline?.image_url,
       airlineName: booking.outbound_flight.plane?.airline?.name,
       seatClass: this.getSeatClass(booking.class_code),
@@ -151,12 +165,40 @@ export class BookingService {
       bookingCode: booking.booking_code,
     }
 
-    // Setup PDF properties for return flight
+    // Generate outbound flight pdf
+    const outboundFileName = randomUUID() + '.pdf';
+    await this.generateTicketPDF(outboundFileName, outboundTicketProps);
 
-    // Generate pdf
-    await this.generateTicketPDF(outboundPdfProps);
+    booking.outbound_ticket_file_name = outboundFileName;
 
-    // Add proof of pdf filename to db and mark payment as completed
+    // Setup PDF properties for return flight (if exists)
+    if (booking.return_flight) {
+      const returnTicketProps: ITiketProps = {
+        airlineImageUrl: booking.return_flight.plane?.airline?.image_url,
+        airlineName: booking.return_flight.plane?.airline?.name,
+        seatClass: this.getSeatClass(booking.class_code),
+        originAirportCode: booking.return_flight.origin_airport?.code,
+        departureTimeString: timeWithTimezone(booking.return_flight.departure_date_time!, booking.return_flight.origin_airport?.timezone!),
+        destinationAirportCode: booking.return_flight.destination_airport?.code,
+        arrivalTimeString:  timeWithTimezone(booking.return_flight.arrival_date_time!, booking.return_flight.origin_airport?.timezone!),
+        dateString: dateToVerboseString(booking.return_flight.departure_date_time!, booking.return_flight.origin_airport?.timezone),
+        durationString: durationString(booking.return_flight.departure_date_time!, booking.return_flight.arrival_date_time!),
+        name: booking.orderer.full_name,
+        totalPassenger: booking.passengers.length,
+        seat: this.generateRandomSeatsString(booking.total_adult + booking.total_children),
+        terminal: booking.return_flight.departure_terminal,
+        bookingCode: booking.booking_code,
+      }
+
+      // Generate return flight pdf
+      const returnFileName = randomUUID() + '.pdf';
+      await this.generateTicketPDF(returnFileName, returnTicketProps);
+      
+      booking.return_ticket_file_name = returnFileName;
+    }
+
+    // Add ticket filename to db and mark payment as completed
+    await this.bookingRepository.finalizeBooking(id, booking.outbound_ticket_file_name, booking.return_ticket_file_name);
 
     // Send email to orderer
   }
@@ -276,7 +318,7 @@ export class BookingService {
     return seatsString;
   }
 
-  private async generateTicketPDF(props: ITiketProps): Promise<void> {
+  private async generateTicketPDF(filename: string, props: ITiketProps): Promise<void> {
     const templateFilePath = join(__dirname, '..', 'templates', 'ticket.hbs');
     const templateHTML = await readFile(templateFilePath, 'utf-8');
     const compiledHTML = Handlebars.compile(templateHTML)(props);
@@ -287,7 +329,7 @@ export class BookingService {
     await page.setContent(compiledHTML)
     await page.emulateMediaType('screen');
     await page.pdf({
-      path: 'tes.pdf',
+      path: join(__dirname, '..', '..', 'storage', 'ticket', filename),
       height: 600,
       width: 400,
       printBackground: true

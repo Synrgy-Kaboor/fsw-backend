@@ -11,6 +11,7 @@ import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import NoTokenException from '@exceptions/NoTokenException';
 import InvalidTokenException from '@exceptions/InvalidTokenException';
 import ExpressValidationException from '@exceptions/ExpressValidationException';
+import SubmissionLimitException from '@exceptions/SubmissionLimitException';
 
 export const exceptionHandler = (
   err: Error,
@@ -115,7 +116,8 @@ export const exceptionHandler = (
       });
     } else if (
       err instanceof UniqueViolationError ||
-      err instanceof ForeignKeyViolationError
+      err instanceof ForeignKeyViolationError ||
+      err instanceof SubmissionLimitException
     ) {
       /**
        * @openapi

@@ -14,7 +14,8 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('add_baggage_insurance').defaultTo(false);
     table.boolean('add_delay_protection').defaultTo(false);
     table.string('proof_of_payment_file_name', 255);
-    table.string('ticket_file_name', 255);
+    table.string('outbound_ticket_file_name', 255);
+    table.string('return_ticket_file_name', 255);
     table.string('booking_code', 50);
 
     table.bigint('outbound_flight_id');

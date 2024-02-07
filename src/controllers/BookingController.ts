@@ -222,7 +222,7 @@ export class BookingController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      await this.bookingService.approvePayment(req.params.id);
+      await this.bookingService.approvePayment(Number(req.params.id));
       
       res.status(200).json({
         code: 200,

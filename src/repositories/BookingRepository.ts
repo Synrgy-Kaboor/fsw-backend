@@ -1,4 +1,5 @@
 import { type Booking, BookingModel } from '@models/BookingModel';
+import { PaymentModel } from '@models/PaymentModel';
 import { raw } from 'objection';
 export class BookingRepository {
   public async createBooking(booking: Partial<Booking>): Promise<number> {
@@ -51,5 +52,22 @@ export class BookingRepository {
         proof_of_payment_file_name: filename
       })
       .throwIfNotFound();
+  }
+
+  public async finalizeBooking(id: number, outboundTicketFilename: string, returnTicketFilename: string): Promise<void> {
+    await BookingModel.transaction(async trx => {
+      const booking = await BookingModel.query(trx)
+      .patchAndFetchById(id, {
+        outbound_ticket_file_name: outboundTicketFilename,
+        return_ticket_file_name: returnTicketFilename,
+      })
+      .throwIfNotFound();
+
+      await PaymentModel.query(trx)
+      .findById(booking.payment_id)
+      .patch({
+        payment_completed: true
+      });
+    })
   }
 }
