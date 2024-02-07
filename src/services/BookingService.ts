@@ -102,6 +102,9 @@ export class BookingService {
       currentDate.getDay() + 
       Math.random().toString(36).substring(2,7);
 
+    // Set Booking Code
+    booking.booking_code = this.generateBookingCode();
+
     // Insert booking
     return await this.bookingRepository.createBooking(booking);
   }
@@ -226,6 +229,28 @@ export class BookingService {
       child_price: 0,
       baby_price: 0,
     };
+  }
+
+  private generateBookingCode(): string {
+    const capitals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let bookingCode = '';
+
+    for (let i = 0; i < 2; i++) {
+      bookingCode += capitals.charAt(Math.floor(Math.random() * capitals.length));
+    }
+
+    bookingCode += '-'
+
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 4; j++) {
+        bookingCode += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      if (i !== 1) bookingCode += '-';
+    }
+
+    return bookingCode;
+
   }
 
   private getSeatClass(classCode: string): string {
