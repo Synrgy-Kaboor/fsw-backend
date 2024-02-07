@@ -10,7 +10,7 @@ import { BookingRepository } from '@repositories/BookingRepository';
 import { FlightRepository } from '@repositories/FlightRepository';
 import { UserRepository } from '@repositories/UserRepository';
 import { VoucherRepository } from '@repositories/VoucherRepository';
-import { addHours, dateToVerboseString, durationString, timeWithTimezone } from '@utils/dateUtils';
+import { addMinutes, dateToVerboseString, durationString, timeWithTimezone } from '@utils/dateUtils';
 import Handlebars from 'handlebars';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
@@ -93,7 +93,7 @@ export class BookingService {
     // Set payment details
     const currentDate = new Date();
     booking.payment.total_price = this.calculatePrice(booking, outboundFlight, returnFlight, voucher)
-    booking.payment.expired_time = addHours(currentDate, 3);
+    booking.payment.expired_time = addMinutes(currentDate, 10);
     booking.payment.payment_completed = false;
     booking.payment.invoice_number = 
       'IV' + 

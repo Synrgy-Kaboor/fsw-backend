@@ -20,6 +20,13 @@ export function addHours(d: Date, hours: number): Date {
   return newDate;
 }
 
+export function addMinutes(d: Date, minutes: number): Date {
+  const newDate = new Date(d);
+  newDate.setMinutes(d.getMinutes() + minutes);
+  
+  return newDate;
+}
+
 export function timezoneString(timezone: number): string {
   const number = Math.abs(timezone) < 10 ? `0${timezone}` : `${timezone}`;
 
