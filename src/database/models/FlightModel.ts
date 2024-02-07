@@ -8,6 +8,7 @@ export class FlightModel extends Model {
   id!: number;
   departure_date_time!: Date;
   arrival_date_time!: Date;
+  departure_terminal!: string;
 
   plane_id!: number;
   origin_airport_id!: number;

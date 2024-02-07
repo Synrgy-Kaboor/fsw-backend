@@ -19,7 +19,8 @@ export async function seed(knex: Knex): Promise<void> {
       add_baggage: true,
       add_travel_insurance: true,
       add_baggage_insurance: true,
-      add_delay_protection: true
+      add_delay_protection: true,
+      booking_code: 'GI-u93j-sdfu'
     },
     {
       outbound_flight_id: 1,
@@ -34,7 +35,8 @@ export async function seed(knex: Knex): Promise<void> {
       add_baggage: false,
       add_travel_insurance: false,
       add_baggage_insurance: false,
-      add_delay_protection: false
+      add_delay_protection: false,
+      booking_code: 'GI-32jd-3ubd'
     }
   ]);
 }

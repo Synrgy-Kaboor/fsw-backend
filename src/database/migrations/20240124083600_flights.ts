@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.bigIncrements('id').primary();
     table.timestamp('departure_date_time').notNullable();
     table.timestamp('arrival_date_time').notNullable();
+    table.string('departure_terminal', 50).notNullable();
 
     table.integer('plane_id').notNullable();
     table.foreign('plane_id').references('planes.id').onDelete('CASCADE');
