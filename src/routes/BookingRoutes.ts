@@ -317,8 +317,72 @@ export default class BookingRoutes implements Routes {
      *            schema:
      *              type: object
      *              $ref: '#/components/schemas/InvalidTokenError'
+     *      '409':
+     *        description: Proof has been uploaded before / booking was already completed
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/ConstraintViolationError'
      */
     this.router.patch(`${this.path}/:id(\\d+)/payment/proof`, authenticateToken, this.controller.submitProofOfPayment);
+
+        /**
+     * @openapi
+     * /api/v1/booking/{id}/payment/approve:
+     *  post:
+     *    summary: Approve booking payment
+     *    description: Approve booking payment
+     *    tags: [Booking]
+     *    security: 
+     *      - bearerAuth: []
+     *    produces:
+     *      - application/json
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        schema:
+     *          type: integer
+     *          example: 1
+     *        description: Booking ID   
+     *    responses:
+     *      '200':
+     *        description: Booking payment approved
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                code:
+     *                  type: integer
+     *                  example: 200
+     *                message:
+     *                  type: string
+     *                  example: 'success'
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     *      '409':
+     *        description: Booking has been approved before / proof of payment not uploaded yet
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/ConstraintViolationError'
+     */
+    this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateToken, this.controller.approvePayment);
 
     // Schemas
     /**
@@ -393,7 +457,5 @@ export default class BookingRoutes implements Routes {
      *          type: string
      *          example: 'Mr'
      */
-
-    this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateToken, this.controller.approvePayment);
   }
 }
