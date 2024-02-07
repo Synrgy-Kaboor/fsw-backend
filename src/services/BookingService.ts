@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BAGGAGE_INSURANCE_PRICE, DELAY_PROTECTION_PRICE, EXTRA_BAGGAGE_PRICE, TRAVEL_INSURANCE_PRICE } from '@constants/prices';
 import { type Booking } from '@models/BookingModel';
 import { type Flight } from '@models/FlightModel';
@@ -8,7 +10,30 @@ import { BookingRepository } from '@repositories/BookingRepository';
 import { FlightRepository } from '@repositories/FlightRepository';
 import { UserRepository } from '@repositories/UserRepository';
 import { VoucherRepository } from '@repositories/VoucherRepository';
-import { addHours } from '@utils/dateUtils';
+import { addMinutes, dateToVerboseString, durationString, timeWithTimezone } from '@utils/dateUtils';
+import Handlebars from 'handlebars';
+import { join } from 'path';
+import { readFile } from 'fs/promises';
+import puppeteer from 'puppeteer';
+import { randomUUID } from 'crypto';
+import SubmissionLimitException from '@exceptions/SubmissionLimitException';
+
+interface ITiketProps {
+  airlineImageUrl?: string;
+  airlineName?: string;
+  seatClass?: string;
+  originAirportCode?: string;
+  departureTimeString?: string;
+  destinationAirportCode?: string;
+  arrivalTimeString?: string;
+  dateString?: string;
+  durationString?: string;
+  name?: string;
+  totalPassenger?: number;
+  seat?: string;
+  terminal?: string;
+  bookingCode?: string;
+}
 
 export class BookingService {
   private readonly bookingRepository = new BookingRepository();
@@ -70,7 +95,7 @@ export class BookingService {
     // Set payment details
     const currentDate = new Date();
     booking.payment.total_price = this.calculatePrice(booking, outboundFlight, returnFlight, voucher)
-    booking.payment.expired_time = addHours(currentDate, 3);
+    booking.payment.expired_time = addMinutes(currentDate, 10);
     booking.payment.payment_completed = false;
     booking.payment.invoice_number = 
       'IV' + 
@@ -78,6 +103,9 @@ export class BookingService {
       currentDate.getMonth() + 
       currentDate.getDay() + 
       Math.random().toString(36).substring(2,7);
+
+    // Set Booking Code
+    booking.booking_code = this.generateBookingCode();
 
     // Insert booking
     return await this.bookingRepository.createBooking(booking);
@@ -97,7 +125,82 @@ export class BookingService {
 
 
   public async addProofOfPaymentFilename(id: number, filename: string): Promise<void> {
+    // Get booking with corresponding id
+    const booking = await this.bookingRepository.getBooking(id);
+
+    // Check if proof of payment exists and payment has not been completed
+    if (booking.proof_of_payment_file_name || booking.payment.payment_completed) {
+      throw new SubmissionLimitException();
+    }
+
+    // Add proof of payment filename
     await this.bookingRepository.addProofOfPaymentFilename(id, filename);
+  }
+
+
+  public async approvePayment(id: number): Promise<void> {
+    // Get booking with corresponding id
+    const booking = await this.bookingRepository.getBooking(id);
+
+    // Check if proof of payment exists and payment has not been completed
+    if (!booking.proof_of_payment_file_name || booking.payment.payment_completed) {
+      throw new SubmissionLimitException();
+    }
+
+    // Setup PDF properties for outbound flight
+    const outboundTicketProps: ITiketProps = {
+      airlineImageUrl: booking.outbound_flight.plane?.airline?.image_url,
+      airlineName: booking.outbound_flight.plane?.airline?.name,
+      seatClass: this.getSeatClass(booking.class_code),
+      originAirportCode: booking.outbound_flight.origin_airport?.code,
+      departureTimeString: timeWithTimezone(booking.outbound_flight.departure_date_time!, booking.outbound_flight.origin_airport?.timezone!),
+      destinationAirportCode: booking.outbound_flight.destination_airport?.code,
+      arrivalTimeString:  timeWithTimezone(booking.outbound_flight.arrival_date_time!, booking.outbound_flight.origin_airport?.timezone!),
+      dateString: dateToVerboseString(booking.outbound_flight.departure_date_time!, booking.outbound_flight.origin_airport?.timezone),
+      durationString: durationString(booking.outbound_flight.departure_date_time!, booking.outbound_flight.arrival_date_time!),
+      name: booking.orderer.full_name,
+      totalPassenger: booking.passengers.length,
+      seat: this.generateRandomSeatsString(booking.total_adult + booking.total_children),
+      terminal: booking.outbound_flight.departure_terminal,
+      bookingCode: booking.booking_code,
+    }
+
+    // Generate outbound flight pdf
+    const outboundFileName = randomUUID() + '.pdf';
+    await this.generateTicketPDF(outboundFileName, outboundTicketProps);
+
+    booking.outbound_ticket_file_name = outboundFileName;
+
+    // Setup PDF properties for return flight (if exists)
+    if (booking.return_flight) {
+      const returnTicketProps: ITiketProps = {
+        airlineImageUrl: booking.return_flight.plane?.airline?.image_url,
+        airlineName: booking.return_flight.plane?.airline?.name,
+        seatClass: this.getSeatClass(booking.class_code),
+        originAirportCode: booking.return_flight.origin_airport?.code,
+        departureTimeString: timeWithTimezone(booking.return_flight.departure_date_time!, booking.return_flight.origin_airport?.timezone!),
+        destinationAirportCode: booking.return_flight.destination_airport?.code,
+        arrivalTimeString:  timeWithTimezone(booking.return_flight.arrival_date_time!, booking.return_flight.origin_airport?.timezone!),
+        dateString: dateToVerboseString(booking.return_flight.departure_date_time!, booking.return_flight.origin_airport?.timezone),
+        durationString: durationString(booking.return_flight.departure_date_time!, booking.return_flight.arrival_date_time!),
+        name: booking.orderer.full_name,
+        totalPassenger: booking.passengers.length,
+        seat: this.generateRandomSeatsString(booking.total_adult + booking.total_children),
+        terminal: booking.return_flight.departure_terminal,
+        bookingCode: booking.booking_code,
+      }
+
+      // Generate return flight pdf
+      const returnFileName = randomUUID() + '.pdf';
+      await this.generateTicketPDF(returnFileName, returnTicketProps);
+      
+      booking.return_ticket_file_name = returnFileName;
+    }
+
+    // Add ticket filename to db and mark payment as completed
+    await this.bookingRepository.finalizeBooking(id, booking.outbound_ticket_file_name, booking.return_ticket_file_name);
+
+    // Send email to orderer
   }
 
 
@@ -168,5 +271,70 @@ export class BookingService {
       child_price: 0,
       baby_price: 0,
     };
+  }
+
+  private generateBookingCode(): string {
+    const capitals = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let bookingCode = '';
+
+    for (let i = 0; i < 2; i++) {
+      bookingCode += capitals.charAt(Math.floor(Math.random() * capitals.length));
+    }
+
+    bookingCode += '-'
+
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 4; j++) {
+        bookingCode += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      if (i !== 1) bookingCode += '-';
+    }
+
+    return bookingCode;
+
+  }
+
+  private getSeatClass(classCode: string): string {
+    switch (classCode) {
+      case 'E': return 'Ekonomi';
+      case 'EP': return 'Ekonomi Premium';
+      case 'B': return 'Bisnis';
+      case 'F': return 'First Class';
+      default: return '';
+    }
+  }
+
+  private generateRandomSeatsString(numberOfSeats: number): string {
+    const number = Math.ceil(Math.random() * 50);
+    let seatsString = '';
+    const possibleAlphabets = 'ABCDEFGH'.split('');
+    const startingAlphabetIdx = Math.floor(Math.random() * 3);
+
+    for (let i = 0; i < numberOfSeats; i++) {
+      seatsString = seatsString + ` ${number}${possibleAlphabets[startingAlphabetIdx+i]}`;
+    }
+
+    return seatsString;
+  }
+
+  private async generateTicketPDF(filename: string, props: ITiketProps): Promise<void> {
+    const templateFilePath = join(__dirname, '..', 'templates', 'ticket.hbs');
+    const templateHTML = await readFile(templateFilePath, 'utf-8');
+    const compiledHTML = Handlebars.compile(templateHTML)(props);
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    await page.setContent(compiledHTML)
+    await page.emulateMediaType('screen');
+    await page.pdf({
+      path: join(__dirname, '..', '..', 'storage', 'ticket', filename),
+      height: 600,
+      width: 400,
+      printBackground: true
+    });
+
+    await browser.close();
   }
 }

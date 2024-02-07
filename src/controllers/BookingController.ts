@@ -1,9 +1,11 @@
 import { PM_ACCOUNT_NUMBERS } from '@constants/pmAccountNumbers';
+import InvalidRequestException from '@exceptions/InvalidRequestException';
 import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import { type Booking } from '@models/BookingModel';
 import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
 import type { NextFunction, Request, Response } from 'express';
+import { join } from 'path';
 
 interface IURLParams {
   id: number
@@ -49,6 +51,57 @@ interface IProofOfPaymentBody {
 
 export class BookingController {
   private readonly bookingService = new BookingService();
+
+  public getBookingsOfUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public getBookingOutboundData = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public getBookingReturnData = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
 
   public createBooking = async (
     req: Request<unknown, unknown, ICreateBookingRequestBody>,
@@ -215,4 +268,64 @@ export class BookingController {
       next(e);
     }
   }
+
+  public approvePayment = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      await this.bookingService.approvePayment(Number(req.params.id));
+      
+      res.status(200).json({
+        code: 200,
+        message: 'success'
+      });
+    } catch (e) {
+      next(e);
+    }
+
+  }
+
+  public downloadOutboundTicket = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const booking = await this.bookingService.getBooking(req.params.id);
+
+      if (!booking.outbound_ticket_file_name) {
+        throw new InvalidRequestException();
+      }
+
+      res.download(
+        join(__dirname, '..', '..', 'storage', 'ticket', booking.outbound_ticket_file_name),
+        `${booking.id}-outbound-flight.pdf`
+      );
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public downloadReturnTicket = async (
+    req: Request<IURLParams>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const booking = await this.bookingService.getBooking(req.params.id);
+
+      if (!booking.return_ticket_file_name) {
+        throw new InvalidRequestException();
+      }
+
+      res.download(
+        join(__dirname, '..', '..', 'storage', 'ticket', booking.return_ticket_file_name),
+        `${booking.id}-return-flight.pdf`
+      );
+    } catch (e) {
+      next(e);
+    }
+  } 
 }
