@@ -26,7 +26,7 @@ export class NotificationRepository {
   public async markReadNotificationById(id: number): Promise<Notification> {
     return await NotificationModel.query()
       .patch({ flag: true, updated_at: new Date() })
-      .where({ id: id })
+      .where('id', id)
       .returning('*')
       .first()
       .throwIfNotFound();
@@ -35,7 +35,7 @@ export class NotificationRepository {
   public async deleteNotificationById(id: number): Promise<Notification> {
     return await NotificationModel.query()
       .patch({ deleted_at: new Date() })
-      .where({ id: id })
+      .where('id', id)
       .returning('*')
       .first()
       .throwIfNotFound();
