@@ -462,9 +462,202 @@ export default class BookingRoutes implements Routes {
      */
     this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateToken, this.controller.approvePayment);
 
+    /**
+     * @openapi
+     * /api/v1/booking/active:
+     *  get:
+     *    summary: Get active bookings
+     *    description: Get active bookings (Outbound and return flights are listed seperately). "types" field may have values "outbound" and "return".
+     *    tags: [Booking]
+     *    produces:
+     *      - application/json
+     *    security: 
+     *      - bearerAuth: []
+     *    responses:
+     *      '200':
+     *        description: Get active bookings success
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                code:
+     *                  type: integer
+     *                  example: 200
+     *                message: 
+     *                  type: string
+     *                  example: 'success'
+     *                data:
+     *                  type: array
+     *                  items:
+     *                    $ref: '#/components/schemas/UserBookingListItem'
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
     this.router.get(`${this.path}/active`, authenticateToken, this.controller.getActiveBookingsOfUser);
+    
+    /**
+     * @openapi
+     * /api/v1/booking/finished:
+     *  get:
+     *    summary: Get finished bookings
+     *    description: Get finished bookings (Outbound and return flights are listed seperately). "types" field may have values "outbound" and "return".
+     *    tags: [Booking]
+     *    produces:
+     *      - application/json
+     *    security: 
+     *      - bearerAuth: []
+     *    responses:
+     *      '200':
+     *        description: Get finished bookings success
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                code:
+     *                  type: integer
+     *                  example: 200
+     *                message: 
+     *                  type: string
+     *                  example: 'success'
+     *                data:
+     *                  type: array
+     *                  items:
+     *                    $ref: '#/components/schemas/UserBookingListItem'
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
     this.router.get(`${this.path}/finished`, authenticateToken, this.controller.getFinishedBookingsOfUser);
+    
+    /**
+     * @openapi
+     * /api/v1/booking/{id}/outbound:
+     *  get:
+     *    summary: Get outbound flight component of booking
+     *    description: Get outbound flight component of booking
+     *    tags: [Booking]
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        schema:
+     *          type: integer
+     *          example: 1
+     *        description: Booking ID   
+     *    produces:
+     *      - application/json
+     *    security: 
+     *      - bearerAuth: []
+     *    responses:
+     *      '200':
+     *        description: Get outbound booking information success
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                code:
+     *                  type: integer
+     *                  example: 200
+     *                message: 
+     *                  type: string
+     *                  example: 'success'
+     *                data:
+     *                  type: object
+     *                  $ref: '#/components/schemas/BookingByIdBody'
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
     this.router.get(`${this.path}/:id(\\d+)/outbound`, authenticateToken, this.controller.getBookingOutboundData);
+    
+    /**
+     * @openapi
+     * /api/v1/booking/{id}/return:
+     *  get:
+     *    summary: Get return flight component of booking
+     *    description: Get return flight component of booking
+     *    tags: [Booking]
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        schema:
+     *          type: integer
+     *          example: 1
+     *        description: Booking ID   
+     *    produces:
+     *      - application/json
+     *    security: 
+     *      - bearerAuth: []
+     *    responses:
+     *      '200':
+     *        description: Get return booking information success
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                code:
+     *                  type: integer
+     *                  example: 200
+     *                message: 
+     *                  type: string
+     *                  example: 'success'
+     *                data:
+     *                  type: object
+     *                  $ref: '#/components/schemas/BookingByIdBody'
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
     this.router.get(`${this.path}/:id(\\d+)/return`, authenticateToken, this.controller.getBookingReturnData);
 
     // Schemas
@@ -515,6 +708,94 @@ export default class BookingRoutes implements Routes {
      *        voucherId:
      *          type: integer
      *          example: 1
+     *    UserBookingListItem:
+     *      type: object
+     *      properties:
+     *        id: 
+     *          type: integer
+     *          example: 1
+     *        bookingCode:
+     *          type: string
+     *          example: 'GI-2432-sin6'
+     *        type: 
+     *          type: string
+     *          example: 'outbound'
+     *        flight:
+     *          type: object
+     *          properties:
+     *            departureDateTime:
+     *              type: string
+     *              example: '2024-02-25T00:00:00.000Z'
+     *            arrivalDateTime:
+     *              type: string
+     *              example: '2024-02-25T00:00:00.000Z'
+     *            plane:
+     *              type: object
+     *              $ref: '#/components/schemas/Plane'
+     *            originAirport:
+     *              type: object
+     *              $ref: '#/components/schemas/Airport'
+     *            destinationAirport:
+     *              type: object
+     *              $ref: '#/components/schemas/Airport'
+     *        uploadedProofOfPayment:
+     *          type: boolean
+     *          example: true
+     *        paymentCompleted:
+     *          type: boolean
+     *          example: true
+     *    BookingByIdBody:
+     *      type: object
+     *      properties:
+     *        id: 
+     *          type: integer
+     *          example: 1
+     *        bookingCode:
+     *          type: string
+     *          example: 'GI-2432-sin6'
+     *        type: 
+     *          type: string
+     *          example: 'outbound'
+     *        flight:
+     *          type: object
+     *          properties:
+     *            departureDateTime:
+     *              type: string
+     *              example: '2024-02-25T00:00:00.000Z'
+     *            arrivalDateTime:
+     *              type: string
+     *              example: '2024-02-25T00:00:00.000Z'
+     *            plane:
+     *              type: object
+     *              $ref: '#/components/schemas/Plane'
+     *            originAirport:
+     *              type: object
+     *              $ref: '#/components/schemas/Airport'
+     *            destinationAirport:
+     *              type: object
+     *              $ref: '#/components/schemas/Airport'
+     *        uploadedProofOfPayment:
+     *          type: boolean
+     *          example: true
+     *        paymentCompleted:
+     *          type: boolean
+     *          example: true
+     *        passengers:
+     *          type: array
+     *          items:
+     *            $ref: '#/components/schemas/Passenger'
+     *        addBaggage:
+     *          type: boolean
+     *          example: true
+     *        addTravelInsurance:
+     *          type: boolean
+     *          example: true
+     *        addBaggageInsurance:
+     *          type: boolean
+     *          example: true
+     *        addDelayProtection:
+     *          type: boolean
+     *          example: true
      *    Orderer:
      *      type: object
      *      properties:

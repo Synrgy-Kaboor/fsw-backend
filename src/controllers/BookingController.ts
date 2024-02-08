@@ -13,7 +13,7 @@ interface IURLParams {
 
 interface IUserBookingListItem {
   id?: number;
-  booking_code?: string;
+  bookingCode?: string;
   type?: string;
   flight: { 
     departureDateTime?: string,
@@ -448,7 +448,7 @@ export class BookingController {
   private createOutboundFlightListItem(b: Booking): IUserBookingListItem {
     return {
       id: b.id,
-      booking_code: b.booking_code,
+      bookingCode: b.booking_code,
       flight: {
         departureDateTime: b.outbound_flight.departure_date_time?.toISOString(),
         arrivalDateTime: b.outbound_flight.arrival_date_time?.toISOString(),
@@ -483,7 +483,7 @@ export class BookingController {
   private createReturnFlightListItem(b: Booking): IUserBookingListItem {
     return {
       id: b.id,
-      booking_code: b.booking_code,
+      bookingCode: b.booking_code,
       flight: {
         departureDateTime: b.return_flight.departure_date_time?.toISOString(),
         arrivalDateTime: b.return_flight.arrival_date_time?.toISOString(),
@@ -518,7 +518,7 @@ export class BookingController {
   private createOutboundBookingByIdBody(b: Booking): IBookingByIdBody {
     return {
       id: b.id,
-      booking_code: b.booking_code,
+      bookingCode: b.booking_code,
       flight: {
         departureDateTime: b.outbound_flight.departure_date_time?.toISOString(),
         arrivalDateTime: b.outbound_flight.arrival_date_time?.toISOString(),
@@ -558,7 +558,7 @@ export class BookingController {
   private createReturnBookingByIdBody(b: Booking): IBookingByIdBody {
     return {
       id: b.id,
-      booking_code: b.booking_code,
+      bookingCode: b.booking_code,
       flight: {
         departureDateTime: b.return_flight.departure_date_time?.toISOString(),
         arrivalDateTime: b.return_flight.arrival_date_time?.toISOString(),
