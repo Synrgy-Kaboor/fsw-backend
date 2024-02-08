@@ -42,7 +42,7 @@ export class BookingRepository {
   public async getBookingsOfUser(userId: number): Promise<Booking[]> {
     return await BookingModel.query()
       .where('creator_id', userId)
-      .withGraphFetched('payment');
+      .withGraphFetched('[payment, outbound_flight.[plane.[airline], origin_airport, destination_airport], return_flight.[plane.[airline], origin_airport, destination_airport]]');
   }
 
   public async addProofOfPaymentFilename(id: number, filename: string): Promise<void> {

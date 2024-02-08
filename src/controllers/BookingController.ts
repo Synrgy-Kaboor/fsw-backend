@@ -11,6 +11,48 @@ interface IURLParams {
   id: number
 }
 
+interface IUserBookingListItem {
+  id?: number;
+  bookingCode?: string;
+  type?: string;
+  flight: { 
+    departureDateTime?: string,
+    arrivalDateTime?: string,
+    plane: {
+      id?: number,
+      code?: string,
+      name?: string,
+      airline?: {
+        id?: number,
+        name?: string,
+        imageUrl?: string
+      }
+    },
+    originAirport: {
+      id?: number,
+      code?: string,
+      name?: string,
+      timezone?: number
+    },
+    destinationAirport: {
+      id?: number,
+      code?: string,
+      name?: string,
+      timezone?: number
+    }
+  },
+  uploadedProofOfPayment?: boolean,
+  paymentCompleted?: boolean
+}
+
+interface IBookingByIdBody extends IUserBookingListItem {
+  passengers: Array<{ fullName?: string, title?: string }>;
+  addBaggage: boolean;
+  addTravelInsurance: boolean;
+  addBaggageInsurance: boolean;
+  addDelayProtection: boolean;
+}
+
 interface ICreateBookingRequestBody {
   outboundFlightId: number;
   returnFlightId: number;
@@ -52,16 +94,98 @@ interface IProofOfPaymentBody {
 export class BookingController {
   private readonly bookingService = new BookingService();
 
-  public getBookingsOfUser = async (
+  public getActiveBookingsOfUser = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
+      const bookings = await this.bookingService.getBookings(req.user.email);
+      const responseData: IUserBookingListItem[] = [];
+
+      for (const b of bookings) {
+        // Check if proof of payment has not been uploaded and the payment has expired
+        if (!b.payment.payment_completed 
+          && (!b.proof_of_payment_file_name 
+            && (!b.payment.expired_time 
+            || b.payment.expired_time < new Date()
+            )
+          )
+        ) {
+          continue;
+        }
+
+        // Check if outbound flight is past current date
+        if (!b.outbound_flight.departure_date_time || b.outbound_flight.departure_date_time < new Date()) {
+          continue;
+        }
+
+        // Push outbound flight to list
+        responseData.push({ ...this.createOutboundFlightListItem(b), type: 'outbound' })
+
+        // Check if return flight is past current date and exists
+        if (!b.return_flight.departure_date_time || b.return_flight.departure_date_time < new Date()) {
+          continue;
+        }
+
+        // Push return flight to list
+        responseData.push({ ...this.createReturnFlightListItem(b), type: 'return' });
+      }
 
       res.status(200).json({
         code: 200,
-        message: 'success'
+        message: 'success',
+        data: responseData
+      });
+      next();
+    } catch (e) {
+      next(e);
+    }
+  } 
+
+  public getFinishedBookingsOfUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const bookings = await this.bookingService.getBookings(req.user.email);
+      console.log(bookings);
+      const responseData: IUserBookingListItem[] = [];
+
+      for (const b of bookings) {
+        // Check if proof of payment has not been uploaded and the payment has expired
+        if (!b.payment.payment_completed 
+          && (!b.proof_of_payment_file_name 
+            && (!b.payment.expired_time 
+            || b.payment.expired_time < new Date()
+            )
+          )
+        ) {
+          continue;
+        }
+
+        // Check if outbound flight is past current date
+        if (!b.outbound_flight.departure_date_time || b.outbound_flight.departure_date_time >= new Date()) {
+          continue;
+        }
+
+        // Push outbound flight to list
+        responseData.push(this.createOutboundFlightListItem(b))
+
+        // Check if return flight is past current date and exists
+        if (!b.return_flight.departure_date_time || b.return_flight.departure_date_time >= new Date()) {
+          continue;
+        }
+
+        // Push return flight to list
+        responseData.push(this.createReturnFlightListItem(b));
+      }
+
+      res.status(200).json({
+        code: 200,
+        message: 'success',
+        data: responseData
       });
       next();
     } catch (e) {
@@ -75,10 +199,13 @@ export class BookingController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const booking = await this.bookingService.getBooking(Number(req.params.id));
+      const responseData = this.createOutboundBookingByIdBody(booking);
 
       res.status(200).json({
         code: 200,
-        message: 'success'
+        message: 'success',
+        data: responseData
       });
       next();
     } catch (e) {
@@ -92,11 +219,22 @@ export class BookingController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const booking = await this.bookingService.getBooking(Number(req.params.id));
+      
+      if (!booking.return_flight_id) {
+        res.status(404).json({
+          code: 404,
+          message: 'Not Found'
+        });
+      } else {
+        const responseData = this.createReturnBookingByIdBody(booking);
+        res.status(200).json({
+          code: 200,
+          message: 'success',
+          data: responseData
+        });
+      }
 
-      res.status(200).json({
-        code: 200,
-        message: 'success'
-      });
       next();
     } catch (e) {
       next(e);
@@ -328,4 +466,154 @@ export class BookingController {
       next(e);
     }
   } 
+
+  private createOutboundFlightListItem(b: Booking): IUserBookingListItem {
+    return {
+      id: b.id,
+      bookingCode: b.booking_code,
+      flight: {
+        departureDateTime: b.outbound_flight.departure_date_time?.toISOString(),
+        arrivalDateTime: b.outbound_flight.arrival_date_time?.toISOString(),
+        plane: {
+          id: b.outbound_flight.plane?.id,
+          code: b.outbound_flight.plane?.code,
+          name: b.outbound_flight.plane?.name,
+          airline: {
+            id: b.outbound_flight.plane?.airline?.id,
+            name: b.outbound_flight.plane?.airline?.name,
+            imageUrl: b.outbound_flight.plane?.airline?.image_url
+          }
+        },
+        originAirport: {
+          id: b.outbound_flight.origin_airport?.id,
+          code: b.outbound_flight.origin_airport?.code,
+          name: b.outbound_flight.origin_airport?.name,
+          timezone: b.outbound_flight.origin_airport?.timezone
+        },
+        destinationAirport: {
+          id: b.outbound_flight.destination_airport?.id,
+          code: b.outbound_flight.destination_airport?.code,
+          name: b.outbound_flight.destination_airport?.name,
+          timezone: b.outbound_flight.destination_airport?.timezone
+        }
+      },
+      uploadedProofOfPayment: !!b.proof_of_payment_file_name,
+      paymentCompleted: b.payment.payment_completed
+    };
+  }
+
+  private createReturnFlightListItem(b: Booking): IUserBookingListItem {
+    return {
+      id: b.id,
+      bookingCode: b.booking_code,
+      flight: {
+        departureDateTime: b.return_flight.departure_date_time?.toISOString(),
+        arrivalDateTime: b.return_flight.arrival_date_time?.toISOString(),
+        plane: {
+          id: b.return_flight.plane?.id,
+          code: b.return_flight.plane?.code,
+          name: b.return_flight.plane?.name,
+          airline: {
+            id: b.return_flight.plane?.airline?.id,
+            name: b.return_flight.plane?.airline?.name,
+            imageUrl: b.return_flight.plane?.airline?.image_url
+          }
+        },
+        originAirport: {
+          id: b.return_flight.origin_airport?.id,
+          code: b.return_flight.origin_airport?.code,
+          name: b.return_flight.origin_airport?.name,
+          timezone: b.return_flight.origin_airport?.timezone
+        },
+        destinationAirport: {
+          id: b.return_flight.destination_airport?.id,
+          code: b.return_flight.destination_airport?.code,
+          name: b.return_flight.destination_airport?.name,
+          timezone: b.return_flight.destination_airport?.timezone
+        }
+      },
+      uploadedProofOfPayment: !!b.proof_of_payment_file_name,
+      paymentCompleted: b.payment.payment_completed
+    };
+  }
+
+  private createOutboundBookingByIdBody(b: Booking): IBookingByIdBody {
+    return {
+      id: b.id,
+      bookingCode: b.booking_code,
+      flight: {
+        departureDateTime: b.outbound_flight.departure_date_time?.toISOString(),
+        arrivalDateTime: b.outbound_flight.arrival_date_time?.toISOString(),
+        plane: {
+          id: b.outbound_flight.plane?.id,
+          code: b.outbound_flight.plane?.code,
+          name: b.outbound_flight.plane?.name,
+          airline: {
+            id: b.outbound_flight.plane?.airline?.id,
+            name: b.outbound_flight.plane?.airline?.name,
+            imageUrl: b.outbound_flight.plane?.airline?.image_url
+          }
+        },
+        originAirport: {
+          id: b.outbound_flight.origin_airport?.id,
+          code: b.outbound_flight.origin_airport?.code,
+          name: b.outbound_flight.origin_airport?.name,
+          timezone: b.outbound_flight.origin_airport?.timezone
+        },
+        destinationAirport: {
+          id: b.outbound_flight.destination_airport?.id,
+          code: b.outbound_flight.destination_airport?.code,
+          name: b.outbound_flight.destination_airport?.name,
+          timezone: b.outbound_flight.destination_airport?.timezone
+        }
+      },
+      uploadedProofOfPayment: !!b.proof_of_payment_file_name,
+      paymentCompleted: b.payment.payment_completed,
+      passengers: b.passengers.map((p) => { return {fullName: p.full_name, title: p.title} }),
+      addBaggage: b.add_baggage,
+      addTravelInsurance: b.add_travel_insurance,
+      addBaggageInsurance: b.add_baggage_insurance,
+      addDelayProtection: b.add_delay_protection
+    };
+  }
+
+  private createReturnBookingByIdBody(b: Booking): IBookingByIdBody {
+    return {
+      id: b.id,
+      bookingCode: b.booking_code,
+      flight: {
+        departureDateTime: b.return_flight.departure_date_time?.toISOString(),
+        arrivalDateTime: b.return_flight.arrival_date_time?.toISOString(),
+        plane: {
+          id: b.return_flight.plane?.id,
+          code: b.return_flight.plane?.code,
+          name: b.return_flight.plane?.name,
+          airline: {
+            id: b.return_flight.plane?.airline?.id,
+            name: b.return_flight.plane?.airline?.name,
+            imageUrl: b.return_flight.plane?.airline?.image_url
+          }
+        },
+        originAirport: {
+          id: b.return_flight.origin_airport?.id,
+          code: b.return_flight.origin_airport?.code,
+          name: b.return_flight.origin_airport?.name,
+          timezone: b.return_flight.origin_airport?.timezone
+        },
+        destinationAirport: {
+          id: b.return_flight.destination_airport?.id,
+          code: b.return_flight.destination_airport?.code,
+          name: b.return_flight.destination_airport?.name,
+          timezone: b.return_flight.destination_airport?.timezone
+        }
+      },
+      uploadedProofOfPayment: !!b.proof_of_payment_file_name,
+      paymentCompleted: b.payment.payment_completed,
+      passengers: b.passengers.map((p) => { return {fullName: p.full_name, title: p.title} }),
+      addBaggage: b.add_baggage,
+      addTravelInsurance: b.add_travel_insurance,
+      addBaggageInsurance: b.add_baggage_insurance,
+      addDelayProtection: b.add_delay_protection
+    };
+  }
 }
