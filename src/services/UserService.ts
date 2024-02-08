@@ -55,7 +55,7 @@ export class UserService {
   public async updateUserNoHp(email: string, noHp: string): Promise<User> {
     const user = await this.userRepository.updateUserNoHpByEmail(email, noHp);
     const receipentEmail: receipentEmail = {
-      Email: user.incoming_email_change,
+      Email: user.email,
       Name: user.full_name,
     };
     await SendMailJet(
@@ -72,7 +72,7 @@ export class UserService {
   public async updateNoHpOtp(email: string): Promise<User> {
     const user = await this.userRepository.updateNoHpOtpByEmail(email);
     const receipentEmail: receipentEmail = {
-      Email: user.incoming_email_change,
+      Email: user.email,
       Name: user.full_name,
     }
     await SendMailJet(
