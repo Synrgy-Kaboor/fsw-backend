@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { join } from 'path';
-import logger from 'utils/logger';
+import logger from '@utils/logger';
 
 export interface receipentEmail {
   Name: string;
