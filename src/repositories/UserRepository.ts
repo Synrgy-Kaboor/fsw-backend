@@ -1,4 +1,5 @@
 import { type User, UserModel } from '@models/UserModel';
+import { generateOtp } from '@utils/generateOtp';
 
 export class UserRepository {
   public async getPersonalInformationByEmail(email: string): Promise<User> {
@@ -53,7 +54,7 @@ export class UserRepository {
     return await UserModel.query()
       .patch({
         incoming_email_change: newEmail,
-        email_otp: `${Math.floor(Math.random() * 10000)}`,
+        email_otp: `${generateOtp(4)}`,
       })
       .where({ email })
       .returning('*')
@@ -80,7 +81,7 @@ export class UserRepository {
   public async updateEmailOtpByEmail(email:string): Promise<User> {
     return await UserModel.query()
       .patch({
-        email_otp: `${Math.floor(Math.random() * 10000)}`,
+        email_otp: `${generateOtp(4)}`,
       })
       .where({ email })
       .returning('*')
@@ -95,7 +96,7 @@ export class UserRepository {
     return await UserModel.query()
       .patch({
         incoming_nohp_change: noHp,
-        nohp_otp: `${Math.floor(Math.random() * 10000)}`,
+        nohp_otp: `${generateOtp(4)}`,
       })
       .where({ email })
       .returning('*')
@@ -122,7 +123,7 @@ export class UserRepository {
   public async updateNoHpOtpByEmail(email:string): Promise<User> {
     return await UserModel.query()
       .patch({
-        nohp_otp: `${Math.floor(Math.random() * 10000)}`,
+        nohp_otp: `${generateOtp(4)}`,
       })
       .where({ email })
       .returning('*')
