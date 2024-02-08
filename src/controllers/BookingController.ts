@@ -104,6 +104,17 @@ export class BookingController {
       const responseData: IUserBookingListItem[] = [];
 
       for (const b of bookings) {
+        // Check if proof of payment has not been uploaded and the payment has expired
+        if (!b.payment.payment_completed 
+          && (!b.proof_of_payment_file_name 
+            && (!b.payment.expired_time 
+            || b.payment.expired_time < new Date()
+            )
+          )
+        ) {
+          continue;
+        }
+
         // Check if outbound flight is past current date
         if (!b.outbound_flight.departure_date_time || b.outbound_flight.departure_date_time < new Date()) {
           continue;
@@ -143,6 +154,17 @@ export class BookingController {
       const responseData: IUserBookingListItem[] = [];
 
       for (const b of bookings) {
+        // Check if proof of payment has not been uploaded and the payment has expired
+        if (!b.payment.payment_completed 
+          && (!b.proof_of_payment_file_name 
+            && (!b.payment.expired_time 
+            || b.payment.expired_time < new Date()
+            )
+          )
+        ) {
+          continue;
+        }
+
         // Check if outbound flight is past current date
         if (!b.outbound_flight.departure_date_time || b.outbound_flight.departure_date_time >= new Date()) {
           continue;
