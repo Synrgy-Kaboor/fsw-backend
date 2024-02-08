@@ -25,7 +25,7 @@ const SendMailJet = async (
     const encode = Buffer.from(
       `${process.env.MAILJET_API_KEY}:${process.env.MAILJET_SECRET_KEY}`,
     ).toString('base64');
-    await fetch('https://api.mailjet.com/v3.1/send', {
+    const response = await fetch('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,6 +33,11 @@ const SendMailJet = async (
       },
       body: JSON.stringify({ Messages: [bodyMessage] }),
     });
+    const error = await response.json()
+    const data = response.status;
+    if (data !== 200) {
+      throw new Error(error)
+    }
     return 'sended';
   } catch (error) {
     console.log(error);
