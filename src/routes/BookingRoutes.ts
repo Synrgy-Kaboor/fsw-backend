@@ -465,7 +465,7 @@ export default class BookingRoutes implements Routes {
     this.router.get(`${this.path}/active`, authenticateToken, this.controller.getActiveBookingsOfUser);
     this.router.get(`${this.path}/finished`, authenticateToken, this.controller.getFinishedBookingsOfUser);
     this.router.get(`${this.path}/:id(\\d+)/outbound`, authenticateToken, this.controller.getBookingOutboundData);
-    this.router.get(`${this.path}/:id(\\d+)/return`, authenticateToken, this.controller.getBookingOutboundData);
+    this.router.get(`${this.path}/:id(\\d+)/return`, authenticateToken, this.controller.getBookingReturnData);
 
     // Schemas
     /**
