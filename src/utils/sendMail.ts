@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { join } from 'path';
+import logger from 'utils/logger';
 
 export interface receipentEmail {
   Name: string;
@@ -36,11 +37,11 @@ const SendMailJet = async (
     const error = await response.json()
     const data = response.status;
     if (data !== 200) {
-      throw new Error(error)
+      logger.info(error)
     }
     return 'sended';
   } catch (error) {
-    console.log(error);
+    logger.info(error)
   }
 };
 
