@@ -14,7 +14,7 @@ const SendMailJet = async (
   try {
     const bodyMessage = {
       From: {
-        Email: process.env.MAILJET_BINAR_KABOOR,
+        Email: `${process.env.MAILJET_BINAR_KABOOR}`,
         Name: 'Kaboor',
       },
       To: receipentEmail,
