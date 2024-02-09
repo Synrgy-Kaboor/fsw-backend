@@ -4,7 +4,7 @@ export function stringToDate(s: string): Date {
 
 export function dateToString(d: Date): string {
   const year = '' + d.getFullYear();
-  let month = '' + d.getMonth() + 1;
+  let month = '' + (d.getMonth() + 1);
   let date = '' + d.getDate();
 
   if (month.length < 2) month = '0' + month;
