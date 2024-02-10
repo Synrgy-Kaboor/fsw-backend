@@ -674,9 +674,12 @@ export default class BookingRoutes implements Routes {
      *    BookingInput:
      *      type: object
      *      properties:
-     *        flightId: 
+     *        outboundFlightId: 
      *          type: integer
      *          example: 1
+     *        returnFlightId:
+     *          type: integer
+     *          example: 2
      *        classCode: 
      *          type: string
      *          example: 'E'
