@@ -16,6 +16,8 @@ interface IPersonalInfoBody {
   imageName: string;
   nik: string;
   imageUrl?: string;
+  email?: string;
+  phoneNumber?: string;
 }
 
 interface changeEmailBody {
@@ -48,7 +50,9 @@ export class UserController {
         address: user.address,
         isWni: user.is_wni,
         imageName: user.image_name,
-        imageUrl: `${process.env.BACKEND_URL}/user/image/${user.image_name}`
+        imageUrl: `${process.env.BACKEND_URL}/user/image/${user.image_name}`,
+        email: user.email,
+        phoneNumber: user.phone_number
       };
 
       res.status(200).json({

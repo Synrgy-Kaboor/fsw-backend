@@ -116,7 +116,7 @@ export class BookingController {
         }
 
         // Check if outbound flight is past current date
-        if (!b.outbound_flight.departure_date_time || b.outbound_flight.departure_date_time < new Date()) {
+        if (!b.outbound_flight?.departure_date_time || b.outbound_flight.departure_date_time < new Date()) {
           continue;
         }
 
@@ -124,7 +124,7 @@ export class BookingController {
         responseData.push({ ...this.createOutboundFlightListItem(b), type: 'outbound' })
 
         // Check if return flight is past current date and exists
-        if (!b.return_flight.departure_date_time || b.return_flight.departure_date_time < new Date()) {
+        if (!b.return_flight?.departure_date_time || b.return_flight.departure_date_time < new Date()) {
           continue;
         }
 
@@ -166,7 +166,7 @@ export class BookingController {
         }
 
         // Check if outbound flight is past current date
-        if (!b.outbound_flight.departure_date_time || b.outbound_flight.departure_date_time >= new Date()) {
+        if (!b.outbound_flight?.departure_date_time || b.outbound_flight.departure_date_time >= new Date()) {
           continue;
         }
 
@@ -174,7 +174,7 @@ export class BookingController {
         responseData.push(this.createOutboundFlightListItem(b))
 
         // Check if return flight is past current date and exists
-        if (!b.return_flight.departure_date_time || b.return_flight.departure_date_time >= new Date()) {
+        if (!b.return_flight?.departure_date_time || b.return_flight.departure_date_time >= new Date()) {
           continue;
         }
 

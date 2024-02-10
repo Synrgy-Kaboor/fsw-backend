@@ -17,7 +17,8 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Surabaya',
       address: 'Jl. Pramuka Raya 5, blok XX',
       is_wni: true,
-      role: 'USER'
+      role: 'USER',
+      phone_number: '087347299225'
     },
     {
       email: 'user2@gmail.com',
@@ -30,7 +31,8 @@ export async function seed(knex: Knex): Promise<void> {
       city: 'Surabaya',
       address: 'Jl. Budaya Raya 6, blok XX',
       is_wni: true,
-      role: 'USER'
+      role: 'USER',
+      phone_number: '087347299293'
     },
     {
       email: 'ignasiusf@gmail.com',
@@ -45,7 +47,8 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: false,
       verified: true,
       role: 'USER',
-      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png'
+      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
+      phone_number: '087347299283'
     },
     {
       email: 'ikhromax@gmail.com',
@@ -59,7 +62,8 @@ export async function seed(knex: Knex): Promise<void> {
       address: 'Jl. Ayam Raya 5, blok XX',
       is_wni: false,
       verified: true,
-      role: 'USER'
+      role: 'USER',
+      phone_number: '087347299215'
     },
     {
       email: 'agungoop24@gmail.com',
@@ -75,7 +79,8 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: false,
       verified: true,
       role: 'USER',
-      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png'
+      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
+      phone_number: '087347299394'
     }
   ]);
 }

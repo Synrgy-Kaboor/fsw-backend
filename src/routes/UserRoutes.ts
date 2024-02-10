@@ -216,6 +216,12 @@ export default class UserRoutes implements Routes {
      *        imageUrl:
      *          type: string
      *          example: 'https://fsw-backend.fly.dev/d63e31aa-4b67-4763-bd83-ed9b513d3204.png'
+     *        email:
+     *          type: string
+     *          example: 'x@gmail.com'
+     *        phoneNumber:
+     *          type: string
+     *          example: '034823948203'
      *    UserPersonalDataInput:
      *      type: object
      *      properties:
