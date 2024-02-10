@@ -125,6 +125,12 @@ export default class BookingRoutes implements Routes {
      *                message: 
      *                  type: string
      *                  example: 'success'
+     *                data:
+     *                  type: object
+     *                  properties:
+     *                    bookingId:  
+     *                      type: integer
+     *                      example: 1
      *      '401':
      *        description: No JWT Token Provided
      *        content:
@@ -668,9 +674,12 @@ export default class BookingRoutes implements Routes {
      *    BookingInput:
      *      type: object
      *      properties:
-     *        flightId: 
+     *        outboundFlightId: 
      *          type: integer
      *          example: 1
+     *        returnFlightId:
+     *          type: integer
+     *          example: 2
      *        classCode: 
      *          type: string
      *          example: 'E'

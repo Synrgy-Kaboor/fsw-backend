@@ -319,7 +319,7 @@ export class BookingService {
   }
 
   private async generateTicketPDF(filename: string, props: ITiketProps): Promise<void> {
-    const templateFilePath = join(__dirname, '..', 'templates', 'ticket.hbs');
+    const templateFilePath = join(__dirname, '..', '..', 'templates', 'ticket.hbs');
     const templateHTML = await readFile(templateFilePath, 'utf-8');
     const compiledHTML = Handlebars.compile(templateHTML)(props);
 
