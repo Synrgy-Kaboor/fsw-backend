@@ -7,7 +7,7 @@ export class PriceNotificationRepository {
         user_id: userId,
         deleted_at: null,
       })
-      .andWhere('departure_date_time', '>', new Date())
+      .andWhere('date', '>', new Date())
       .withGraphFetched('[origin_airport, destination_airport]');
   }
 

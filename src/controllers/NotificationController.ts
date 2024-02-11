@@ -22,7 +22,6 @@ interface IPriceNotificationResponseBody {
 }
 
 interface IPriceNotificationRequestBody {
-  id?: number;
   totalAdults?: number;
   totalChildren?: number;
   totalBabies?: number;

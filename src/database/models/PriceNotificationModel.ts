@@ -28,7 +28,7 @@ export class PriceNotificationModel extends Model {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {
     //eslint-disable-line
-    return 'flights';
+    return 'price_notifications';
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -38,7 +38,7 @@ export class PriceNotificationModel extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: AirportModel,
         join: {
-          from: 'flights.origin_airport_id',
+          from: 'price_notifications.origin_airport_id',
           to: 'airports.id'
         }
       },
@@ -46,7 +46,7 @@ export class PriceNotificationModel extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: AirportModel,
         join: {
-          from: 'flights.destination_airport_id',
+          from: 'price_notifications.destination_airport_id',
           to: 'airports.id'
         }
       }
