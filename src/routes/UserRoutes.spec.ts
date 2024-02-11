@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import logger from '@utils/logger';
 import UserRoutes from './UserRoutes';
 import supertest from 'supertest';
+import { s3utils } from '@utils/s3utils';
 
 const JWT_PRIVATE_KEY = Buffer.from(process.env.JWT_PRIVATE_KEY ?? '', 'base64');
 
@@ -34,6 +35,12 @@ describe('Test Get Personal Information: GET /api/v1/user', () => {
       const spy = vi.spyOn(logger, fn);
       spy.mockImplementation(() => {});
     }
+
+    const spyS3Get = vi.spyOn(s3utils, 'getFileUrl');
+    spyS3Get.mockImplementation(async () => {return 'sample URL'});
+
+    const spyS3Upload = vi.spyOn(s3utils, 'uploadFile');
+    spyS3Upload.mockImplementation(async () => {});
   });
 
   it('should return user data', async () => {
@@ -86,7 +93,8 @@ describe('Test Update Personal Information: PATCH /api/v1/user', () => {
       nation: 'Malaysia',
       city: 'Kuala Lumpur',
       address: 'Jl. Nasi Lemak 5, blok YY',
-      isWni: false
+      isWni: false,
+      nik: '23492383241'
     };
 
     const response = await supertest(app)
@@ -98,7 +106,11 @@ describe('Test Update Personal Information: PATCH /api/v1/user', () => {
     expect(response.body).toMatchObject({
       code: 200,
       message: 'success',
-      data: newPersonalInfo
+      data: {
+        ...newPersonalInfo,
+        imageName: null,
+        imageUrl: expect.any(String || null)
+      }
     });
   });
 });

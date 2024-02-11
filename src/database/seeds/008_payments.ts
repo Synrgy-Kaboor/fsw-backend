@@ -9,17 +9,17 @@ export async function seed(knex: Knex): Promise<void> {
     {
       payment_method: 'BCA',
       total_price: 5660000,
-      expired_time: new Date(2024, 1, 20, 8),
+      expired_time: new Date(Date.UTC(2024, 1, 20, 8)),
       payment_completed: true,
-      payment_date_time: new Date(2024, 1, 20, 9),
+      payment_date_time: new Date(Date.UTC(2024, 1, 20, 9)),
       invoice_number: 'IV202422052436'
     },
     {
       payment_method: 'BRI',
       total_price: 3200000,
-      expired_time: new Date(2024, 1, 21, 8),
+      expired_time: new Date(Date.UTC(2024, 1, 21, 8)),
       payment_completed: true,
-      payment_date_time: new Date(2024, 1, 21, 9),
+      payment_date_time: new Date(Date.UTC(2024, 1, 21, 9)),
       invoice_number: 'IV202422155436'
     }
   ]);

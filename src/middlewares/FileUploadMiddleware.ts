@@ -1,17 +1,11 @@
 import multer from 'multer';
-import { join, extname } from 'path';
-import { randomUUID } from 'crypto';
+import { extname } from 'path';
 import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 
+const storage = multer.memoryStorage();
+
 export const profileImageUpload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, join(__dirname, '..', '..', 'storage', 'profile'));
-    },
-    filename: (req, file, cb) => {
-      cb(null, randomUUID() + extname(file.originalname));
-    },
-  }),
+  storage,
   fileFilter: (req, file, cb) => {
     const ext = extname(file.originalname);
     if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
@@ -23,14 +17,7 @@ export const profileImageUpload = multer({
 });
 
 export const paymentFileUpload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, join(__dirname, '..', '..', 'storage', 'payment'));
-    },
-    filename: (req, file, cb) => {
-      cb(null, randomUUID() + extname(file.originalname));
-    },
-  }),
+  storage,
   fileFilter: (req, file, cb) => {
     const ext = extname(file.originalname);
     if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.pdf') {

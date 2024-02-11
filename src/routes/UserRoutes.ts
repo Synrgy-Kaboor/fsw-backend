@@ -93,6 +93,10 @@ export default class UserRoutes implements Routes {
      *                message:
      *                  type: string
      *                  example: 'success'
+     *                data:
+     *                  type: array
+     *                  items:
+     *                    $ref: '#/components/schemas/UserPersonalDataOutput'
      *      '401':
      *        description: No JWT Token Provided
      *        content:
@@ -144,6 +148,15 @@ export default class UserRoutes implements Routes {
      *                message:
      *                  type: string
      *                  example: 'success'
+     *                data:
+     *                  type: object
+     *                  properties:
+     *                   imageName:
+     *                      type: string
+     *                      example: '3424-3429-3029-3940.png'
+     *                   imageUrl:
+     *                      type: string
+     *                      example: 'https://fsw-backend.fly.dev/payment/file/3424-3429-3029-3940.png'
      *      '400':
      *        description: No file / Wrong file type / Wrong form field name
      *        content:

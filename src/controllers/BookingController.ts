@@ -5,7 +5,10 @@ import { type Booking } from '@models/BookingModel';
 import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
 import type { NextFunction, Request, Response } from 'express';
-import { join } from 'path';
+import { randomUUID } from 'crypto';
+import { extname } from 'path';
+import { s3utils } from '@utils/s3utils';
+
 
 interface IURLParams {
   id: number
@@ -375,12 +378,21 @@ export class BookingController {
         throw new NoFileReceivedException();
       }
 
+      const fileName = randomUUID() + extname(req.file.originalname);
+
+      await s3utils.uploadFile(
+        'kaboor-payment-proof', 
+        fileName, 
+        req.file.buffer, 
+        req.file.mimetype
+      );
+
       res.status(200).json({
         code: 200,
         message: 'success',
         data: {
-          fileName: req.file.filename,
-          fileUrl: `${process.env.BACKEND_URL}/payment/file/${req.file.filename}`
+          imageName: fileName,
+          imageUrl: await s3utils.getFileUrl('kaboor-payment-proof', fileName)
         }
       });
       next();
@@ -437,9 +449,11 @@ export class BookingController {
         throw new InvalidRequestException();
       }
 
-      res.download(
-        join(__dirname, '..', '..', 'storage', 'ticket', booking.outbound_ticket_file_name),
-        `${booking.id}-outbound-flight.pdf`
+      res.redirect(
+        await s3utils.getFileUrl(
+          'kaboor-ticket', 
+          booking.outbound_ticket_file_name
+        )
       );
     } catch (e) {
       next(e);
@@ -458,9 +472,11 @@ export class BookingController {
         throw new InvalidRequestException();
       }
 
-      res.download(
-        join(__dirname, '..', '..', 'storage', 'ticket', booking.return_ticket_file_name),
-        `${booking.id}-return-flight.pdf`
+      res.redirect(
+        await s3utils.getFileUrl(
+          'kaboor-ticket', 
+          booking.return_ticket_file_name
+        )
       );
     } catch (e) {
       next(e);

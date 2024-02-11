@@ -17,7 +17,7 @@ export async function up(knex: Knex): Promise<void> {
     table.bigInteger('forget_password_verify_deadlines').notNullable().defaultTo(0);
     table.string('title', 50);
     table.string('gender', 50);
-    table.date('birth_day');
+    table.timestamp('birth_day', { useTz: false });
     table.string('nation', 255);
     table.string('city', 255);
     table.string('address', 255);

@@ -17,6 +17,10 @@ import { readFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
 import { randomUUID } from 'crypto';
 import SubmissionLimitException from '@exceptions/SubmissionLimitException';
+import { s3utils } from '@utils/s3utils';
+import { SendMailJet, type receipentEmail } from '@utils/sendMail';
+import { type AttachmentFile } from 'types/AttachmentFile';
+import { NotificationRepository } from '@repositories/NotificationRepository';
 
 interface ITiketProps {
   airlineImageUrl?: string;
@@ -40,6 +44,7 @@ export class BookingService {
   private readonly flightRepository = new FlightRepository();
   private readonly userRepository = new UserRepository();
   private readonly voucherRepository = new VoucherRepository();
+  private readonly notificationRepository = new NotificationRepository();
 
   public async createBooking(booking: Partial<Booking>, creatorEmail: string): Promise<number> {
     if (!booking.outbound_flight_id || !booking.class_code || !booking.payment) {
@@ -133,6 +138,11 @@ export class BookingService {
       throw new SubmissionLimitException();
     }
 
+    // Check if payment has not exceeded time limit
+    if (!booking.payment.expired_time || booking.payment.expired_time < new Date()) {
+      throw new SubmissionLimitException();
+    }
+
     // Add proof of payment filename
     await this.bookingRepository.addProofOfPaymentFilename(id, filename);
   }
@@ -153,10 +163,10 @@ export class BookingService {
       airlineName: booking.outbound_flight.plane?.airline?.name,
       seatClass: this.getSeatClass(booking.class_code),
       originAirportCode: booking.outbound_flight.origin_airport?.code,
-      departureTimeString: timeWithTimezone(booking.outbound_flight.departure_date_time!, booking.outbound_flight.origin_airport?.timezone!),
+      departureTimeString: timeWithTimezone(booking.outbound_flight.departure_date_time!, Number(booking.outbound_flight.origin_airport?.timezone!)),
       destinationAirportCode: booking.outbound_flight.destination_airport?.code,
-      arrivalTimeString:  timeWithTimezone(booking.outbound_flight.arrival_date_time!, booking.outbound_flight.origin_airport?.timezone!),
-      dateString: dateToVerboseString(booking.outbound_flight.departure_date_time!, booking.outbound_flight.origin_airport?.timezone),
+      arrivalTimeString:  timeWithTimezone(booking.outbound_flight.arrival_date_time!, Number(booking.outbound_flight.origin_airport?.timezone!)),
+      dateString: dateToVerboseString(booking.outbound_flight.departure_date_time!, Number(booking.outbound_flight.origin_airport?.timezone)),
       durationString: durationString(booking.outbound_flight.departure_date_time!, booking.outbound_flight.arrival_date_time!),
       name: booking.orderer.full_name,
       totalPassenger: booking.passengers.length,
@@ -167,21 +177,22 @@ export class BookingService {
 
     // Generate outbound flight pdf
     const outboundFileName = randomUUID() + '.pdf';
-    await this.generateTicketPDF(outboundFileName, outboundTicketProps);
+    const outboundFileBuffer = await this.generateTicketPDF(outboundFileName, outboundTicketProps);
 
     booking.outbound_ticket_file_name = outboundFileName;
 
     // Setup PDF properties for return flight (if exists)
+    let returnFileBuffer = null;
     if (booking.return_flight) {
       const returnTicketProps: ITiketProps = {
         airlineImageUrl: booking.return_flight.plane?.airline?.image_url,
         airlineName: booking.return_flight.plane?.airline?.name,
         seatClass: this.getSeatClass(booking.class_code),
         originAirportCode: booking.return_flight.origin_airport?.code,
-        departureTimeString: timeWithTimezone(booking.return_flight.departure_date_time!, booking.return_flight.origin_airport?.timezone!),
+        departureTimeString: timeWithTimezone(booking.return_flight.departure_date_time!, Number(booking.return_flight.origin_airport?.timezone!)),
         destinationAirportCode: booking.return_flight.destination_airport?.code,
-        arrivalTimeString:  timeWithTimezone(booking.return_flight.arrival_date_time!, booking.return_flight.origin_airport?.timezone!),
-        dateString: dateToVerboseString(booking.return_flight.departure_date_time!, booking.return_flight.origin_airport?.timezone),
+        arrivalTimeString:  timeWithTimezone(booking.return_flight.arrival_date_time!, Number(booking.return_flight.origin_airport?.timezone!)),
+        dateString: dateToVerboseString(booking.return_flight.departure_date_time!, Number(booking.return_flight.origin_airport?.timezone)),
         durationString: durationString(booking.return_flight.departure_date_time!, booking.return_flight.arrival_date_time!),
         name: booking.orderer.full_name,
         totalPassenger: booking.passengers.length,
@@ -192,7 +203,7 @@ export class BookingService {
 
       // Generate return flight pdf
       const returnFileName = randomUUID() + '.pdf';
-      await this.generateTicketPDF(returnFileName, returnTicketProps);
+      returnFileBuffer = await this.generateTicketPDF(returnFileName, returnTicketProps);
       
       booking.return_ticket_file_name = returnFileName;
     }
@@ -200,7 +211,42 @@ export class BookingService {
     // Add ticket filename to db and mark payment as completed
     await this.bookingRepository.finalizeBooking(id, booking.outbound_ticket_file_name, booking.return_ticket_file_name);
 
+    // Add payment completed notification
+    await this.notificationRepository.createNotification({
+      type: 'approval',
+      title: 'Pembayaran Berhasil',
+      detail: `Pembayaran tiket pesawat untuk rute ${booking.outbound_flight.origin_airport?.code} - ${booking.outbound_flight.origin_airport?.code} sudah dikonfirmasi. Siapkan perjalanan kamu dengan semangat!`
+    });
+
     // Send email to orderer
+    if (booking.orderer.email && booking.orderer.full_name) {
+      const receipentEmail: receipentEmail = {
+        Email: booking.orderer.email,
+        Name: booking.orderer.full_name
+      }
+
+      const attachments: AttachmentFile[] = [
+        {
+          ContentType: 'application/pdf',
+          FileName: `Keberangkatan-${booking.id}`,
+          Base64Content: Buffer.from(outboundFileBuffer).toString('base64')
+        }
+      ]
+
+      if (returnFileBuffer) {
+        attachments.push({
+          ContentType: 'application/pdf',
+          FileName: `Kepulangan-${booking.id}`,
+          Base64Content: Buffer.from(returnFileBuffer).toString('base64')
+        })
+      }
+  
+      await SendMailJet(
+        [receipentEmail],
+        `Pembayaran tiket pesawat Anda telah terverifikasi. Berikut ini kami lampirkan tiket Anda. Selamat menikmati perjalanan Anda!`,
+        attachments
+      );
+    }
   }
 
 
@@ -318,17 +364,20 @@ export class BookingService {
     return seatsString;
   }
 
-  private async generateTicketPDF(filename: string, props: ITiketProps): Promise<void> {
+  private async generateTicketPDF(filename: string, props: ITiketProps): Promise<Buffer> {
+    // Generate PDF
     const templateFilePath = join(__dirname, '..', '..', 'templates', 'ticket.hbs');
     const templateHTML = await readFile(templateFilePath, 'utf-8');
     const compiledHTML = Handlebars.compile(templateHTML)(props);
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
 
     await page.setContent(compiledHTML)
     await page.emulateMediaType('screen');
-    await page.pdf({
+    const fileBuffer = await page.pdf({
       path: join(__dirname, '..', '..', 'storage', 'ticket', filename),
       height: 600,
       width: 400,
@@ -336,5 +385,15 @@ export class BookingService {
     });
 
     await browser.close();
+
+    // Upload to S3
+    await s3utils.uploadFile(
+      'kaboor-ticket', 
+      filename,
+      fileBuffer,
+      'application/pdf'
+    );
+
+    return fileBuffer;
   }
 }
