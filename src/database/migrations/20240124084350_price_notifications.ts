@@ -11,8 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('class_code', 10).notNullable();
     table.integer('minimum_price').notNullable();
     table.integer('maximum_price').notNullable();
-    table.timestamp('departure_date_time').notNullable();
-    table.timestamp('arrival_date_tiem').notNullable();
+    table.timestamp('date', { useTz: false }).notNullable();
     table.timestamps(true, true);
     table.timestamp('deleted_at');
 

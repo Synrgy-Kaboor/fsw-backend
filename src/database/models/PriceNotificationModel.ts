@@ -2,7 +2,7 @@ import { Model, type ModelObject } from 'objection';
 import { type Airport, AirportModel } from './AirportsModel';
 import { type User } from './UserModel';
 
-export class FlightModel extends Model {
+export class PriceNotificationModel extends Model {
   id!: number;
   total_adult!: number;
   total_children!: number;
@@ -10,8 +10,11 @@ export class FlightModel extends Model {
   class_code!: string;
   minimum_price!: number;
   maximum_price!: number;
-  departure_date_time!: Date;
-  arrival_date_time!: Date;
+  date!: Date;
+
+  created_at!: Date;
+  updated_at!: Date;
+  deleted_at!: Date;
 
   origin_airport_id!: number;
   destination_airport_id!: number;
@@ -51,4 +54,4 @@ export class FlightModel extends Model {
   }
 }
 
-export type Flight = ModelObject<FlightModel>;
+export type PriceNotification = ModelObject<PriceNotificationModel>;

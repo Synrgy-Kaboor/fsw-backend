@@ -19,6 +19,7 @@ export default class NotificationRoutes implements Routes {
         this.router.delete(`${this.path}/:id`, authenticateToken, this.controller.deleteNotificationById);
 
         this.router.get(`${this.path}/price`, authenticateToken, this.controller.getPriceNotificationByEmail);
+        this.router.post(`${this.path}/price`, authenticateToken, this.controller.createPriceNotification);
         this.router.patch(`${this.path}/price/:id(\\d+)`, authenticateToken, this.controller.updatePriceNotification);
         this.router.delete(`${this.path}/price/:id(\\d+)`, authenticateToken, this.controller.deletePriceNotification);
     }
