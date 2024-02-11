@@ -328,7 +328,9 @@ export class BookingService {
     const templateHTML = await readFile(templateFilePath, 'utf-8');
     const compiledHTML = Handlebars.compile(templateHTML)(props);
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
 
     await page.setContent(compiledHTML)
