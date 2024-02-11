@@ -8,6 +8,8 @@ import type { Router } from 'express';
  *      description: Booking and payment related endpoints
  *  -   name: Flight
  *      description: Flight resource endpoints
+ *  -   name: Notification
+ *      description: Notification and price notification resource endpoints
  *  -   name: User
  *      description: User resource endpoints
  *  -   name: Voucher

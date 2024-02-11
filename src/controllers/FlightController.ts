@@ -9,6 +9,8 @@ interface IFlightSearchQuery {
   numOfChildren: number;
   numOfBabies: number;
   classCode: string;
+  minimumPrice: number;
+  maximumPrice: number;
 }
 
 interface IFlightBody {
@@ -81,8 +83,12 @@ export class FlightController {
         req.query.originAirportCode,
         req.query.destinationAirportCode,
         req.query.date,
-        Number(req.query.numOfAdults) + Number(req.query.numOfChildren),
-        req.query.classCode
+        Number(req.query.numOfAdults),
+        Number(req.query.numOfChildren),
+        Number(req.query.numOfBabies),
+        req.query.classCode,
+        req.query.minimumPrice ?? null,
+        req.query.maximumPrice ?? null
       )
 
       const responseData: IFlightBody[] = [];
