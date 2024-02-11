@@ -215,7 +215,8 @@ export class BookingService {
     await this.notificationRepository.createNotification({
       type: 'approval',
       title: 'Pembayaran Berhasil',
-      detail: `Pembayaran tiket pesawat untuk rute ${booking.outbound_flight.origin_airport?.code} - ${booking.outbound_flight.origin_airport?.code} sudah dikonfirmasi. Siapkan perjalanan kamu dengan semangat!`
+      detail: `Pembayaran tiket pesawat untuk rute ${booking.outbound_flight.origin_airport?.code} - ${booking.outbound_flight.origin_airport?.code} sudah dikonfirmasi. Siapkan perjalanan kamu dengan semangat!`,
+      user_id: booking.creator_id
     });
 
     // Send email to orderer
