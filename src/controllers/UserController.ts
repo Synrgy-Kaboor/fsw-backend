@@ -140,8 +140,12 @@ export class UserController {
       );
 
       res.status(200).json({
-        imageName: fileName,
-        imageUrl: await getFileUrlS3('kaboor-profile', fileName)
+        code: 200,
+        message: 'success',
+        data: {
+          imageName: fileName,
+          imageUrl: await getFileUrlS3('kaboor-profile', fileName)
+        }
       });
     } catch (e) {
       next(e);

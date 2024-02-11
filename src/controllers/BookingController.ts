@@ -5,7 +5,10 @@ import { type Booking } from '@models/BookingModel';
 import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
 import type { NextFunction, Request, Response } from 'express';
-import { join } from 'path';
+import { randomUUID } from 'crypto';
+import { join, extname } from 'path';
+import { getFileUrlS3, uploadFileS3 } from '@utils/s3upload';
+
 
 interface IURLParams {
   id: number
@@ -375,12 +378,21 @@ export class BookingController {
         throw new NoFileReceivedException();
       }
 
+      const fileName = randomUUID() + extname(req.file.originalname);
+
+      await uploadFileS3(
+        'kaboor-payment-proof', 
+        fileName, 
+        req.file.buffer, 
+        req.file.mimetype
+      );
+
       res.status(200).json({
         code: 200,
         message: 'success',
         data: {
-          fileName: req.file.filename,
-          fileUrl: `${process.env.BACKEND_URL}/payment/file/${req.file.filename}`
+          imageName: fileName,
+          imageUrl: await getFileUrlS3('kaboor-payment-proof', fileName)
         }
       });
       next();
