@@ -34,12 +34,9 @@ export function timezoneString(timezone: number): string {
 }
 
 export function timeWithTimezone(d: Date, timezone: number): string {
-  let hours = d.getHours() - timezone;
-  const minutes = d.getMinutes();
-
-  if (hours < 0) {
-    hours = 24 - hours;
-  }
+  const newDate = addHours(d, timezone)
+  const hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
 
   const hoursString = hours < 10 ? `0${hours}` : `${hours}`;
   const minutesString = minutes < 10 ? `0${minutes}` : `${minutes}`;
