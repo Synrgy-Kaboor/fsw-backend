@@ -19,7 +19,7 @@ export class RegisterService {
   public async register(user: Partial<User>): Promise<User> {
     user.password = user.password
       ? bcrypt.hashSync(user.password, this.saltRounds)
-      : null;
+      : undefined;
     user.otp = generateOtp(4);
     user.verify_deadlines = getNextFiveMinutesOnSeconds();
     user.role = 'USER';
