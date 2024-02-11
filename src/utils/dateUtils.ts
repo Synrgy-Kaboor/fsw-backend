@@ -1,5 +1,7 @@
 export function stringToDate(s: string): Date {
-  return new Date(s);
+  const dSplit = s.split('-');
+
+  return new Date(Date.UTC(Number(dSplit[0]), Number(dSplit[1]) - 1, Number(dSplit[2])));
 }
 
 export function dateToString(d: Date): string {

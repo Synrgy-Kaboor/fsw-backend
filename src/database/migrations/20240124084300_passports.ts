@@ -7,7 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.bigIncrements('id').primary();
     table.string('passport_number', 100).notNullable();
     table.string('full_name', 100).notNullable();
-    table.timestamp('expired_date').notNullable();
+    table.timestamp('expired_date', { useTz: false }).notNullable();
     table.string('nation', 50).notNullable();
     table.timestamps(true, true)
     table.timestamp('deleted_at');

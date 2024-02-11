@@ -7,7 +7,7 @@ import { BookingService } from '@services/BookingService';
 import type { NextFunction, Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
-import { getFileUrlS3, uploadFileS3 } from '@utils/s3upload';
+import { s3utils } from '@utils/s3utils';
 
 
 interface IURLParams {
@@ -380,7 +380,7 @@ export class BookingController {
 
       const fileName = randomUUID() + extname(req.file.originalname);
 
-      await uploadFileS3(
+      await s3utils.uploadFile(
         'kaboor-payment-proof', 
         fileName, 
         req.file.buffer, 
@@ -392,7 +392,7 @@ export class BookingController {
         message: 'success',
         data: {
           imageName: fileName,
-          imageUrl: await getFileUrlS3('kaboor-payment-proof', fileName)
+          imageUrl: await s3utils.getFileUrl('kaboor-payment-proof', fileName)
         }
       });
       next();
@@ -450,7 +450,7 @@ export class BookingController {
       }
 
       res.redirect(
-        await getFileUrlS3(
+        await s3utils.getFileUrl(
           'kaboor-ticket', 
           booking.outbound_ticket_file_name
         )
@@ -473,7 +473,7 @@ export class BookingController {
       }
 
       res.redirect(
-        await getFileUrlS3(
+        await s3utils.getFileUrl(
           'kaboor-ticket', 
           booking.return_ticket_file_name
         )

@@ -17,7 +17,7 @@ import { readFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
 import { randomUUID } from 'crypto';
 import SubmissionLimitException from '@exceptions/SubmissionLimitException';
-import { uploadFileS3 } from '@utils/s3upload';
+import { s3utils } from '@utils/s3utils';
 import { SendMailJet, type receipentEmail } from '@utils/sendMail';
 import { type AttachmentFile } from 'types/AttachmentFile';
 import { NotificationRepository } from '@repositories/NotificationRepository';
@@ -387,7 +387,7 @@ export class BookingService {
     await browser.close();
 
     // Upload to S3
-    await uploadFileS3(
+    await s3utils.uploadFile(
       'kaboor-ticket', 
       filename,
       fileBuffer,

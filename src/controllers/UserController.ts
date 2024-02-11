@@ -2,7 +2,7 @@ import NoFileReceivedException from '@exceptions/NoFileReceivedException';
 import type { User } from '@models/UserModel';
 import { UserService } from '@services/UserService';
 import { dateToString, stringToDate } from '@utils/dateUtils';
-import { getFileUrlS3, uploadFileS3 } from '@utils/s3upload';
+import { s3utils } from '@utils/s3utils';
 import type { NextFunction, Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
@@ -53,7 +53,7 @@ export class UserController {
         address: user.address,
         isWni: user.is_wni,
         imageName: user.image_name,
-        imageUrl: user.image_name ? await getFileUrlS3('kaboor-profile', user.image_name) : '',
+        imageUrl: user.image_name ? await s3utils.getFileUrl('kaboor-profile', user.image_name) : '',
         email: user.email,
         phoneNumber: user.phone_number
       };
@@ -106,7 +106,7 @@ export class UserController {
         address: user.address,
         isWni: user.is_wni,
         imageName: user.image_name,
-        imageUrl: user.image_name ? await getFileUrlS3('kaboor-profile', user.image_name) : ''
+        imageUrl: user.image_name ? await s3utils.getFileUrl('kaboor-profile', user.image_name) : ''
       };
 
       res.status(200).json({
@@ -132,7 +132,7 @@ export class UserController {
 
       const fileName = randomUUID() + extname(req.file.originalname);
       
-      await uploadFileS3(
+      await s3utils.uploadFile(
         'kaboor-profile', 
         fileName, 
         req.file.buffer, 
@@ -144,7 +144,7 @@ export class UserController {
         message: 'success',
         data: {
           imageName: fileName,
-          imageUrl: await getFileUrlS3('kaboor-profile', fileName)
+          imageUrl: await s3utils.getFileUrl('kaboor-profile', fileName)
         }
       });
     } catch (e) {
