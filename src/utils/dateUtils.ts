@@ -15,7 +15,7 @@ export function dateToString(d: Date): string {
 
 export function addHours(d: Date, hours: number): Date {
   const newDate = new Date(d);
-  newDate.setHours(d.getHours() + hours);
+  newDate.setUTCHours(d.getUTCHours() + hours);
 
   return newDate;
 }
@@ -34,8 +34,8 @@ export function timezoneString(timezone: number): string {
 }
 
 export function timeWithTimezone(d: Date, timezone: number): string {
-  const newDate = addHours(d, timezone)
-  const hours = newDate.getHours();
+  const newDate = addHours(d, timezone);
+  const hours = newDate.getUTCHours();
   const minutes = newDate.getMinutes();
 
   const hoursString = hours < 10 ? `0${hours}` : `${hours}`;
