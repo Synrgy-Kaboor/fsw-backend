@@ -133,6 +133,11 @@ export class BookingService {
       throw new SubmissionLimitException();
     }
 
+    // Check if payment has not exceeded time limit
+    if (!booking.payment.expired_time || booking.payment.expired_time < new Date()) {
+      throw new SubmissionLimitException();
+    }
+
     // Add proof of payment filename
     await this.bookingRepository.addProofOfPaymentFilename(id, filename);
   }
