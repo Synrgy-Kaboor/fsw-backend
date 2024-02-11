@@ -54,6 +54,7 @@ export default class FlightRoutes implements Routes {
      *        description: Number of child passengers
      *      - in: query
      *        name: numOfBabies
+     *        required: true
      *        schema:
      *          type: integer
      *          example: 1
@@ -72,6 +73,20 @@ export default class FlightRoutes implements Routes {
      *          type: string
      *          example: '2024-02-25'
      *        description: Flight date. Make sure that the date format is right.
+     *      - in: query
+     *        name: minimumPrice
+     *        required: false
+     *        schema:
+     *          type: integer
+     *          example: 1500000
+     *        description: Minimum total flight price
+     *      - in: query
+     *        name: maximumPrice
+     *        required: false
+     *        schema:
+     *          type: integer
+     *          example: 5000000
+     *        description: Maximum total flight price
      *    responses:
      *      '200':
      *        description: Get flights success
