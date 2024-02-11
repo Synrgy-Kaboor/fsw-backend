@@ -18,6 +18,8 @@ import puppeteer from 'puppeteer';
 import { randomUUID } from 'crypto';
 import SubmissionLimitException from '@exceptions/SubmissionLimitException';
 import { uploadFileS3 } from '@utils/s3upload';
+import { SendMailJet, type receipentEmail } from '@utils/sendMail';
+import { type AttachmentFile } from 'types/AttachmentFile';
 
 interface ITiketProps {
   airlineImageUrl?: string;
@@ -173,11 +175,12 @@ export class BookingService {
 
     // Generate outbound flight pdf
     const outboundFileName = randomUUID() + '.pdf';
-    await this.generateTicketPDF(outboundFileName, outboundTicketProps);
+    const outboundFileBuffer = await this.generateTicketPDF(outboundFileName, outboundTicketProps);
 
     booking.outbound_ticket_file_name = outboundFileName;
 
     // Setup PDF properties for return flight (if exists)
+    let returnFileBuffer = null;
     if (booking.return_flight) {
       const returnTicketProps: ITiketProps = {
         airlineImageUrl: booking.return_flight.plane?.airline?.image_url,
@@ -198,7 +201,7 @@ export class BookingService {
 
       // Generate return flight pdf
       const returnFileName = randomUUID() + '.pdf';
-      await this.generateTicketPDF(returnFileName, returnTicketProps);
+      returnFileBuffer = await this.generateTicketPDF(returnFileName, returnTicketProps);
       
       booking.return_ticket_file_name = returnFileName;
     }
@@ -207,6 +210,34 @@ export class BookingService {
     await this.bookingRepository.finalizeBooking(id, booking.outbound_ticket_file_name, booking.return_ticket_file_name);
 
     // Send email to orderer
+    if (booking.orderer.email && booking.orderer.full_name) {
+      const receipentEmail: receipentEmail = {
+        Email: booking.orderer.email,
+        Name: booking.orderer.full_name
+      }
+
+      const attachments: AttachmentFile[] = [
+        {
+          ContentType: 'application/pdf',
+          FileName: `Keberangkatan-${booking.id}`,
+          Base64Content: Buffer.from(outboundFileBuffer).toString('base64')
+        }
+      ]
+
+      if (returnFileBuffer) {
+        attachments.push({
+          ContentType: 'application/pdf',
+          FileName: `Kepulangan-${booking.id}`,
+          Base64Content: Buffer.from(returnFileBuffer).toString('base64')
+        })
+      }
+  
+      await SendMailJet(
+        [receipentEmail],
+        `Pembayaran tiket pesawat Anda telah terverifikasi. Berikut ini kami lampirkan tiket Anda. Selamat menikmati perjalanan Anda!`,
+        attachments
+      );
+    }
   }
 
 
@@ -324,7 +355,7 @@ export class BookingService {
     return seatsString;
   }
 
-  private async generateTicketPDF(filename: string, props: ITiketProps): Promise<void> {
+  private async generateTicketPDF(filename: string, props: ITiketProps): Promise<Buffer> {
     // Generate PDF
     const templateFilePath = join(__dirname, '..', '..', 'templates', 'ticket.hbs');
     const templateHTML = await readFile(templateFilePath, 'utf-8');
@@ -353,5 +384,7 @@ export class BookingService {
       fileBuffer,
       'application/pdf'
     );
+
+    return fileBuffer;
   }
 }

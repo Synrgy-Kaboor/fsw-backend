@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { join } from 'path';
 import logger from '@utils/logger';
+import { type AttachmentFile } from 'types/AttachmentFile';
 
 export interface receipentEmail {
   Name: string;
@@ -11,6 +12,7 @@ dotenv.config({ path: join(__dirname, '..', '..', '.env') });
 const SendMailJet = async (
   receipentEmail: receipentEmail[],
   message: string,
+  attachments: AttachmentFile[] = []
 ): Promise<string | undefined> => {
   try {
     const bodyMessage = {
@@ -22,7 +24,9 @@ const SendMailJet = async (
       Subject: 'Email From Kaboor',
       TextPart: message,
       HTMLPart: `<p>${message}</p>`,
+      Attachments: attachments
     };
+
     const encode = Buffer.from(
       `${process.env.MAILJET_API_KEY}:${process.env.MAILJET_SECRET_KEY}`,
     ).toString('base64');
