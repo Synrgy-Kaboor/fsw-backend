@@ -6,7 +6,7 @@ import { type Passenger } from '@models/PassengerModel';
 import { BookingService } from '@services/BookingService';
 import type { NextFunction, Request, Response } from 'express';
 import { randomUUID } from 'crypto';
-import { join, extname } from 'path';
+import { extname } from 'path';
 import { getFileUrlS3, uploadFileS3 } from '@utils/s3upload';
 
 
@@ -449,9 +449,11 @@ export class BookingController {
         throw new InvalidRequestException();
       }
 
-      res.download(
-        join(__dirname, '..', '..', 'storage', 'ticket', booking.outbound_ticket_file_name),
-        `${booking.id}-outbound-flight.pdf`
+      res.redirect(
+        await getFileUrlS3(
+          'kaboor-ticket', 
+          booking.outbound_ticket_file_name
+        )
       );
     } catch (e) {
       next(e);
@@ -470,9 +472,11 @@ export class BookingController {
         throw new InvalidRequestException();
       }
 
-      res.download(
-        join(__dirname, '..', '..', 'storage', 'ticket', booking.return_ticket_file_name),
-        `${booking.id}-return-flight.pdf`
+      res.redirect(
+        await getFileUrlS3(
+          'kaboor-ticket', 
+          booking.return_ticket_file_name
+        )
       );
     } catch (e) {
       next(e);

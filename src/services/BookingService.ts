@@ -17,6 +17,7 @@ import { readFile } from 'fs/promises';
 import puppeteer from 'puppeteer';
 import { randomUUID } from 'crypto';
 import SubmissionLimitException from '@exceptions/SubmissionLimitException';
+import { uploadFileS3 } from '@utils/s3upload';
 
 interface ITiketProps {
   airlineImageUrl?: string;
@@ -324,6 +325,7 @@ export class BookingService {
   }
 
   private async generateTicketPDF(filename: string, props: ITiketProps): Promise<void> {
+    // Generate PDF
     const templateFilePath = join(__dirname, '..', '..', 'templates', 'ticket.hbs');
     const templateHTML = await readFile(templateFilePath, 'utf-8');
     const compiledHTML = Handlebars.compile(templateHTML)(props);
@@ -335,7 +337,7 @@ export class BookingService {
 
     await page.setContent(compiledHTML)
     await page.emulateMediaType('screen');
-    await page.pdf({
+    const fileBuffer = await page.pdf({
       path: join(__dirname, '..', '..', 'storage', 'ticket', filename),
       height: 600,
       width: 400,
@@ -343,5 +345,13 @@ export class BookingService {
     });
 
     await browser.close();
+
+    // Upload to S3
+    await uploadFileS3(
+      'kaboor-ticket', 
+      filename,
+      fileBuffer,
+      'application/pdf'
+    );
   }
 }
