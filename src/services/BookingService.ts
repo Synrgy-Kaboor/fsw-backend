@@ -20,6 +20,7 @@ import SubmissionLimitException from '@exceptions/SubmissionLimitException';
 import { uploadFileS3 } from '@utils/s3upload';
 import { SendMailJet, type receipentEmail } from '@utils/sendMail';
 import { type AttachmentFile } from 'types/AttachmentFile';
+import { NotificationRepository } from '@repositories/NotificationRepository';
 
 interface ITiketProps {
   airlineImageUrl?: string;
@@ -43,6 +44,7 @@ export class BookingService {
   private readonly flightRepository = new FlightRepository();
   private readonly userRepository = new UserRepository();
   private readonly voucherRepository = new VoucherRepository();
+  private readonly notificationRepository = new NotificationRepository();
 
   public async createBooking(booking: Partial<Booking>, creatorEmail: string): Promise<number> {
     if (!booking.outbound_flight_id || !booking.class_code || !booking.payment) {
@@ -208,6 +210,13 @@ export class BookingService {
 
     // Add ticket filename to db and mark payment as completed
     await this.bookingRepository.finalizeBooking(id, booking.outbound_ticket_file_name, booking.return_ticket_file_name);
+
+    // Add payment completed notification
+    await this.notificationRepository.createNotification({
+      type: 'approval',
+      title: 'Pembayaran Berhasil',
+      detail: `Pembayaran tiket pesawat untuk rute ${booking.outbound_flight.origin_airport?.code} - ${booking.outbound_flight.origin_airport?.code} sudah dikonfirmasi. Siapkan perjalanan kamu dengan semangat!`
+    });
 
     // Send email to orderer
     if (booking.orderer.email && booking.orderer.full_name) {
