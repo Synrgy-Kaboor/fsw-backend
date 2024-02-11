@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { RegisterService } from '@services/RegisterService';
-import { User } from '@models/UserModel';
+import type { User } from '@models/UserModel';
 
 interface RegisterBody {
   phoneNumber: string;
@@ -16,7 +16,7 @@ export class RegisterController {
     req: Request<unknown, unknown, RegisterBody>,
     res: Response,
     next: NextFunction,
-  ) => {
+  ):Promise<void> => {
     try {
       if (
         !(
