@@ -2,6 +2,7 @@ import type { User } from '@models/UserModel';
 import { RegisterRepository } from '@repositories/RegisterRepository';
 import { generateOtp } from '@utils/generateOtp';
 import { SendMailJet, receipentEmail } from '@utils/sendMail';
+import bcrypt from 'bcrypt';
 const getNextFiveMinutesOnSeconds = () => {
   const currentSeconds = getCurrentSeconds();
   return currentSeconds + 300;
@@ -13,17 +14,15 @@ const getCurrentSeconds = () => {
 };
 
 export class RegisterService {
-  private JWT_PRIVATE_KEY = Buffer.from(
-    process.env.JWT_PRIVATE_KEY ?? '',
-    'base64',
-  );
+  private saltRounds = 10;
   private readonly registerRepository = new RegisterRepository();
   public async register(user: Partial<User>): Promise<User> {
     user.password
-      ? (user.password = jwt.sign(user.password, this.JWT_PRIVATE_KEY))
+      ? (user.password = bcrypt.hashSync(user.password, this.saltRounds))
       : null;
     user.otp = generateOtp(4);
     user.verify_deadlines = getNextFiveMinutesOnSeconds();
+    user.role = 'USER';
     const newUser = await this.registerRepository.register(user);
     await SendMailJet(
       [
