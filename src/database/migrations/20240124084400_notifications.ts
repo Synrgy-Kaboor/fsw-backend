@@ -12,7 +12,8 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamps(true, true);
     table.timestamp('deleted_at');
 
-    table.bigInteger('price_notification_id').defaultTo(null);
+    table.bigInteger('price_notification_id')
+    table.foreign('price_notification_id').references('price_notifications.id').onDelete('CASCADE');
 
     table.bigint('user_id');
     table.foreign('user_id').references('users.id').onDelete('CASCADE');
