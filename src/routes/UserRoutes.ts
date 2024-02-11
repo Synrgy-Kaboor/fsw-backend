@@ -93,6 +93,10 @@ export default class UserRoutes implements Routes {
      *                message:
      *                  type: string
      *                  example: 'success'
+     *                data:
+     *                  type: array
+     *                  items:
+     *                    $ref: '#/components/schemas/UserPersonalDataOutput'
      *      '401':
      *        description: No JWT Token Provided
      *        content:
