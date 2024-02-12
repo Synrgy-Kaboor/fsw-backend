@@ -44,8 +44,9 @@ interface IUserBookingListItem {
       timezone?: number
     }
   },
-  uploadedProofOfPayment?: boolean,
-  paymentCompleted?: boolean
+  uploadedProofOfPayment?: boolean;
+  paymentCompleted?: boolean;
+  classCode?: string;
 }
 
 interface IBookingByIdBody extends IUserBookingListItem {
@@ -54,6 +55,9 @@ interface IBookingByIdBody extends IUserBookingListItem {
   addTravelInsurance: boolean;
   addBaggageInsurance: boolean;
   addDelayProtection: boolean;
+  totalAdults: number;
+  totalChildren: number;
+  totalBabies: number;
 }
 
 interface ICreateBookingRequestBody {
@@ -514,7 +518,8 @@ export class BookingController {
         }
       },
       uploadedProofOfPayment: !!b.proof_of_payment_file_name,
-      paymentCompleted: b.payment.payment_completed
+      paymentCompleted: b.payment.payment_completed,
+      classCode: b.class_code
     };
   }
 
@@ -549,7 +554,8 @@ export class BookingController {
         }
       },
       uploadedProofOfPayment: !!b.proof_of_payment_file_name,
-      paymentCompleted: b.payment.payment_completed
+      paymentCompleted: b.payment.payment_completed,
+      classCode: b.class_code
     };
   }
 
@@ -589,9 +595,14 @@ export class BookingController {
       addBaggage: b.add_baggage,
       addTravelInsurance: b.add_travel_insurance,
       addBaggageInsurance: b.add_baggage_insurance,
-      addDelayProtection: b.add_delay_protection
+      addDelayProtection: b.add_delay_protection,
+      totalAdults: b.total_adult,
+      totalChildren: b.total_children,
+      totalBabies: b.total_baby,
+      classCode: b.class_code
     };
-  }
+  };
+  
 
   private createReturnBookingByIdBody(b: Booking): IBookingByIdBody {
     return {
@@ -629,7 +640,11 @@ export class BookingController {
       addBaggage: b.add_baggage,
       addTravelInsurance: b.add_travel_insurance,
       addBaggageInsurance: b.add_baggage_insurance,
-      addDelayProtection: b.add_delay_protection
+      addDelayProtection: b.add_delay_protection,
+      totalAdults: b.total_adult,
+      totalChildren: b.total_children,
+      totalBabies: b.total_baby,
+      classCode: b.class_code
     };
   }
 }

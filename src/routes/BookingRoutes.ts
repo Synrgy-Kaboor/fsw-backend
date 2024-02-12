@@ -762,6 +762,9 @@ export default class BookingRoutes implements Routes {
      *        paymentCompleted:
      *          type: boolean
      *          example: true
+     *        classCode:
+     *          type: string
+     *          example: 'E'
      *    BookingByIdBody:
      *      type: object
      *      properties:
@@ -814,6 +817,18 @@ export default class BookingRoutes implements Routes {
      *        addDelayProtection:
      *          type: boolean
      *          example: true
+     *        totalAdults:
+     *          type: integer
+     *          example: 1
+     *        totalChildren:
+     *          type: integer
+     *          example: 1
+     *        totalBabies:
+     *          type: integer
+     *          example: 1
+     *        classCode:
+     *          type: string
+     *          example: 'E'
      *    Orderer:
      *      type: object
      *      properties:
