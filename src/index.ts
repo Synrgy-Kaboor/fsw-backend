@@ -8,6 +8,7 @@ import VoucherRoutes from '@routes/VoucherRoutes';
 import PassportRoutes from '@routes/PassportRoutes';
 import NotificationRoutes from '@routes/NotificationRoutes';
 import RegisterRoutes from '@routes/RegisterRoutes';
+import AuthRoutes from '@routes/AuthRoutes';
 
 const routes: Routes[] = [
   new UserRoutes(),
@@ -18,6 +19,7 @@ const routes: Routes[] = [
   new PassportRoutes(),
   new NotificationRoutes(),
   new RegisterRoutes(),
+  new AuthRoutes(),
 ];
 
 const app = new App(routes);
