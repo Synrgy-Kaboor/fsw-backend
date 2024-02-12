@@ -96,7 +96,7 @@ export class NotificationController {
 
       const responseData: IPriceNotificationResponseBody[] = priceNotifications.map(pn => {
         return {
-          id: pn.id,
+          id: Number(pn.id),
           totalAdults: pn.total_adult,
           totalChildren: pn.total_children,
           totalBabies: pn.total_baby,
