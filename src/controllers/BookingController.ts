@@ -395,8 +395,8 @@ export class BookingController {
         code: 200,
         message: 'success',
         data: {
-          imageName: fileName,
-          imageUrl: await s3utils.getFileUrl('kaboor-payment-proof', fileName)
+          fileName,
+          fileUrl: await s3utils.getFileUrl('kaboor-payment-proof', fileName)
         }
       });
       next();
