@@ -13,5 +13,13 @@ export default class RegisterRoutes implements Routes {
 
   private initializeRoutes(): void {
     this.router.post(`${this.path}`, this.controller.register);
+    this.router.post(
+      `${this.path}/otp/verify`,
+      this.controller.verifyOtpRegister,
+    );
+    this.router.post(
+      `${this.path}/otp/resend`,
+      this.controller.resendOtpRegister,
+    );
   }
 }

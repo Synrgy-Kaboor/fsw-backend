@@ -76,3 +76,13 @@ export function durationString(start: Date, end: Date): string {
 
   return hours && minutes ? `${hoursString} ${minutesString}` : `${hoursString}${minutesString}`;
 }
+
+export function getNextFiveMinutesOnSeconds (): number {
+  const currentSeconds = getCurrentSeconds();
+  return currentSeconds + 300;
+};
+
+export function getCurrentSeconds (): number {
+  const now = new Date();
+  return Math.floor(now.getTime() / 1000); 
+};

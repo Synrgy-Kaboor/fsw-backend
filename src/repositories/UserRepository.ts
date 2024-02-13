@@ -16,7 +16,7 @@ export class UserRepository {
         'is_wni',
         'image_name',
         'email',
-        'phone_number'
+        'phone_number',
       )
       .findOne({
         email,
@@ -80,7 +80,7 @@ export class UserRepository {
       .throwIfNotFound();
   }
 
-  public async updateEmailOtpByEmail(email:string): Promise<User> {
+  public async updateEmailOtpByEmail(email: string): Promise<User> {
     return await UserModel.query()
       .patch({
         email_otp: `${generateOtp(4)}`,
@@ -122,7 +122,7 @@ export class UserRepository {
       .throwIfNotFound();
   }
 
-  public async updateNoHpOtpByEmail(email:string): Promise<User> {
+  public async updateNoHpOtpByEmail(email: string): Promise<User> {
     return await UserModel.query()
       .patch({
         nohp_otp: `${generateOtp(4)}`,
@@ -132,5 +132,12 @@ export class UserRepository {
       .first()
       .throwIfNotFound();
   }
-  
+
+  public async getUserByOtp(otp: string): Promise<User> {
+    return await UserModel.query().findOne({ otp }).throwIfNotFound();
+  }
+
+  public async getUserByEmail(email: string): Promise<User> {
+    return await UserModel.query().findOne({ email }).throwIfNotFound();
+  }
 }

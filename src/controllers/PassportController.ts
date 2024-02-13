@@ -66,12 +66,13 @@ export class PassportController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      if (req.params.id === '')
+      if (req.params.id === '') {
         res.status(400).json({
           code: 400,
           message: 'Passport id is required',
         });
-
+        return;
+      }
       const id = parseInt(req.params.id);
       const passport = await this.passportService.getPassportById(id);
       res.status(200).json({
@@ -92,12 +93,13 @@ export class PassportController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      if (req.params.id === '')
+      if (req.params.id === '') {
         res.status(400).json({
           code: 400,
           message: 'Passport id is required',
         });
-
+        return;
+      }
       const id = parseInt(req.params.id);
       const passport: Partial<Passport> = {
         passport_number: req.body.passportNumber,
@@ -133,6 +135,7 @@ export class PassportController {
           code: 400,
           message: 'Passport id is required',
         });
+        return;
       }
       const id = parseInt(req.params.id);
       await this.passportService.deletePassportById(id);

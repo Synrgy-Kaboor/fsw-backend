@@ -13,7 +13,8 @@ export class UserModel extends Model {
   otp!: string;
   verified!: boolean;
   verify_deadlines!: number;
-  request_for_change_password!: boolean;
+  request_for_change_password_otp!: string;
+  request_for_change_password_verified!: boolean;
   forget_password_verify_deadlines!: number;
   title!: string;
   gender!: string;
