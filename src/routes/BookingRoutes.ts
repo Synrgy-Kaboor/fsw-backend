@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import type { Routes } from './Routes';
-import { authenticateToken } from '@middlewares/AuthMiddleware';
+import { authenticateAdminToken, authenticateToken } from '@middlewares/AuthMiddleware';
 import { BookingController } from '@controllers/BookingController';
 import { paymentFileUpload } from '@middlewares/FileUploadMiddleware';
 
@@ -424,8 +424,8 @@ export default class BookingRoutes implements Routes {
      * @openapi
      * /api/v1/booking/{id}/payment/approve:
      *  post:
-     *    summary: Approve booking payment
-     *    description: Approve booking payment
+     *    summary: Approve booking payment (ADMIN ONLY)
+     *    description: Approve booking payment (ADMIN ONLY)
      *    tags: [Booking]
      *    security: 
      *      - bearerAuth: []
@@ -475,7 +475,7 @@ export default class BookingRoutes implements Routes {
      *              type: object
      *              $ref: '#/components/schemas/ConstraintViolationError'
      */
-    this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateToken, this.controller.approvePayment);
+    this.router.post(`${this.path}/:id(\\d+)/payment/approve`, authenticateAdminToken, this.controller.approvePayment);
 
     /**
      * @openapi

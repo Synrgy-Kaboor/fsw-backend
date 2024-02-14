@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import type { Routes } from './Routes';
 import { FlightController } from '@controllers/FlightController';
-import { authenticateToken } from '@middlewares/AuthMiddleware';
+import { authenticateAdminToken } from '@middlewares/AuthMiddleware';
 
 export default class FlightRoutes implements Routes {
   private readonly path = '/api/v1/flight';
@@ -148,8 +148,8 @@ export default class FlightRoutes implements Routes {
      * @openapi
      * /api/v1/flight:
      *  post:
-     *    summary: Create flight
-     *    description: Create flight
+     *    summary: Create flight (ADMIN ONLY)
+     *    description: Create flight (ADMIN ONLY)
      *    tags: [Flight]
      *    security: 
      *      - bearerAuth: []
@@ -190,7 +190,7 @@ export default class FlightRoutes implements Routes {
      *              type: object
      *              $ref: '#/components/schemas/InvalidTokenError'
      */
-    this.router.post(`${this.path}`, authenticateToken, this.controller.addFlight);
+    this.router.post(`${this.path}`, authenticateAdminToken, this.controller.addFlight);
 
     // Schemas
     /**
