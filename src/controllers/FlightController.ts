@@ -1,3 +1,4 @@
+import { type Flight } from '@models/FlightModel';
 import { FlightService } from '@services/FlightService';
 import type { NextFunction, Request, Response } from 'express';
 
@@ -42,6 +43,21 @@ interface IFlightBody {
   adultPrice?: number,
   childPrice?: number,
   babyPrice?: number
+}
+
+interface ICreateFlightBody {
+  departureDatetime?: string;
+  arrivalDatetime?: string;
+  departureTerminal?: string;
+  planeId: number;
+  originAirportId: number;
+  destinationAirportId: number;
+  flightPrices: Array<{
+    classCode: string,
+    adultPrice: number,
+    childPrice: number,
+    babyPrice: number
+  }>
 }
 
 interface IURLParams {
@@ -196,6 +212,43 @@ export class FlightController {
           code: 200,
           message: 'success',
           data: responseData
+        }
+      );
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public addFlight = async (
+    req: Request<unknown, unknown, ICreateFlightBody>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const flight: Partial<Flight> = {
+        departure_date_time: new Date(req.body.departureDatetime ?? ''),
+        arrival_date_time: new Date(req.body.arrivalDatetime ?? ''),
+        departure_terminal: req.body.departureTerminal,
+        plane_id: req.body.planeId,
+        origin_airport_id: req.body.originAirportId,
+        destination_airport_id: req.body.destinationAirportId,
+        flight_prices: req.body.flightPrices.map(fp => {
+          return {
+            class_code: fp.classCode,
+            adult_price: fp.adultPrice,
+            child_price: fp.childPrice,
+            baby_price: fp.childPrice
+          }
+        })
+      };
+
+      await this.flightService.addFlight(flight);
+
+      res.status(200).json(
+        {
+          code: 200,
+          message: 'success'
         }
       );
       next();

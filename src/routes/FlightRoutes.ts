@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import type { Routes } from './Routes';
 import { FlightController } from '@controllers/FlightController';
+import { authenticateToken } from '@middlewares/AuthMiddleware';
 
 export default class FlightRoutes implements Routes {
   private readonly path = '/api/v1/flight';
@@ -143,11 +144,84 @@ export default class FlightRoutes implements Routes {
      */
     this.router.get(`${this.path}/:id(\\d+)`, this.controller.getFlight);
 
+    /**
+     * @openapi
+     * /api/v1/flight:
+     *  post:
+     *    summary: Create flight
+     *    description: Create flight
+     *    tags: [Flight]
+     *    security: 
+     *      - bearerAuth: []
+     *    produces:
+     *      - application/json
+     *    requestBody:
+     *      content:
+     *        application/json:
+     *          schema:
+     *            type: object
+     *            $ref: '#/components/schemas/FlightInput'
+     *    responses:
+     *      '200':
+     *        description: Create airport success
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              properties:
+     *                code:
+     *                  type: integer
+     *                  example: 200
+     *                message:
+     *                  type: string
+     *                  example: 'success'
+     *      '401':
+     *        description: No JWT Token Provided
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/NoTokenError'
+     *      '403':
+     *        description: Invalid JWT Token
+     *        content:
+     *          application/json:
+     *            schema:
+     *              type: object
+     *              $ref: '#/components/schemas/InvalidTokenError'
+     */
+    this.router.post(`${this.path}`, authenticateToken, this.controller.addFlight);
+
     // Schemas
     /**
      * @openapi
      * components:
      *  schemas:
+     *    FlightInput:
+     *      type: object
+     *      properties:
+     *        departureDatetime:
+     *          type: string
+     *          example: '2024-02-25T02:00:00.000Z'
+     *        arrivalDatetime:
+     *          type: string
+     *          example: '2024-02-25T04:00:00.000Z'
+     *        departureTerminal:
+     *          type: string
+     *          example: '3'
+     *        planeId:
+     *          type: number
+     *          example: 1
+     *        originAirportId:
+     *          type: number
+     *          example: 1
+     *        destinationAirportId:
+     *          type: number
+     *          example: 2
+     *        flightPrices:
+     *          type: array
+     *          items:
+     *            $ref: '#/components/schemas/FlightPrice'
      *    Flight:
      *      type: object
      *      properties:
@@ -208,6 +282,22 @@ export default class FlightRoutes implements Routes {
      *        imageUrl:
      *          type: string
      *          example: 'https://fsw-backend.fly.dev/airlines/image/garuda_indonesia.png'
+     *    FlightPrice:
+     *      type: object
+     *      properties:
+     *        classCode:
+     *          type: string
+     *          example: 'E'
+     *        adultPrice:
+     *          type: integer
+     *          example: 1000000
+     *        childPrice:
+     *          type: integer
+     *          example: 1000000
+     *        babyPrice:
+     *          type: integer
+     *          example: 100000
+     *          
      */
   }
 }

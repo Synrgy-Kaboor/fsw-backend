@@ -52,6 +52,10 @@ export class FlightRepository {
       .throwIfNotFound();
   }
 
+  public async addFlight(flight: Partial<Flight>): Promise<Flight> {
+    return await FlightModel.query().insertGraph(flight);
+  }
+
   private getCapacity(plane: Partial<Plane>, classCode: string): number {
     switch(classCode) {
       case 'E': 
@@ -66,5 +70,4 @@ export class FlightRepository {
         throw new Error('Invalid Class Code!');
     }
   }
-
 }
