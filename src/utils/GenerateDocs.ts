@@ -3,12 +3,9 @@ import SwaggerJSDoc from 'swagger-jsdoc';
 const definition = {
   openapi: '3.0.3',
   info: {
-    title: 'Binar Car Rental',
+    title: 'Kaboor - FSW Backend',
     version: '1.0.0',
-    description: 'REST API used by Binar Car Rental App',
-    contact: {
-      name: 'Ignasius Ferry Priguna',
-    },
+    description: 'REST API used by Kaboor Android and web client, built with NodeJS',
   },
   servers: [
     {
