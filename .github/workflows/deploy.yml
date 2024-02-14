@@ -1,11 +1,12 @@
-name: Deploy to Development Environment
+name: Deploy
 on:
   push:
     branches:
       - develop
+      - main
 jobs:
   lint-test:
-    uses: Synrgy-Kaboor/full-stack-web/.github/workflows/lint-test.yml@develop
+    uses: Synrgy-Kaboor/fsw-backend/.github/workflows/lint-test.yml@develop
   deploy:
     name: Deploy app to Fly.io
     runs-on: ubuntu-latest

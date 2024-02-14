@@ -1,0 +1,162 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-family: 'Sans-Serif';
+        margin: 10px;
+        border: 2px solid #C2C2C2;
+        border-radius: 8px;
+        height: fit-content;
+      }
+
+      section {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      #airline-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: fit-content;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 2px dashed #C2C2C2;
+      }
+
+      #flight-schedule-section {
+        display: grid;
+        grid-template-columns: 4fr 3fr 4fr;
+        height: fit-content;
+        padding-top: 30px;
+        padding-bottom: 10px;
+      }
+
+      #flight-details-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding-top: 0;
+        padding-bottom: 20px;
+      }
+
+      #barcode-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 30px;
+        padding-bottom: 10px;
+        border-top: 2px dashed #C2C2C2;
+      }
+
+      .col_div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .black_text {
+        color: #1C1C1E;
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .grey_text {
+        color: #9E9E9E;
+        font-size: 11px;
+        line-height: 14px;
+      }
+
+      .bold {
+        font-weight: 600;
+      }
+
+      .align_left {
+        text-align: start;
+        align-self: self-start;
+      }
+
+      .align_center {
+        text-align: center;
+        align-self: center;
+      }
+
+      .align_right {
+        text-align: end;
+        align-self: self-end;
+      }
+
+      .m5 {
+        margin: 5px;
+      }
+
+      .flight_detail_item {
+        display: flex;
+        flex-direction: column;
+        height: 65px;
+        justify-content: center;
+      }
+
+      .inter_font {
+        font-family: Inter, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="airline-section">
+      <img src="{{ airlineImageUrl }}" height="50px">
+      <div class="col_div">
+        <span class="black_text align_right bold">{{ airlineName }}</span>
+        <span class="grey_text align_right bold">{{ seatClass }}</span>
+      </div>
+    </section>
+
+    <section id="flight-schedule-section">
+      <div class="col_div">
+        <span class="grey_text align_left bold">{{ originAirportCode }}</span>
+        <span class="black_text align_left bold">{{ departureTimeString }}</span>
+      </div>
+      <div class="col_div">
+        <span class="grey_text align_center bold">{{ dateString }}</span>
+        <img class="align_center m5" src="http://localhost:3000/plane.png" height="15px" width="15px">
+        <span class="grey_text align_center bold">Durasi {{ durationString }}</span>
+      </div>
+      <div class="col_div">
+        <span class="grey_text align_right bold">{{ destinationAirportCode }}</span>
+        <span class="black_text align_right bold">{{ arrivalTimeString }}</span>
+      </div>
+    </section>
+
+    <section id="flight-details-section">
+      <div class="flight_detail_item">
+        <span class="grey_text align_left bold">Nama</span>
+        <span class="black_text align_left bold">{{ name }}</span>
+      </div>
+      <div class="flight_detail_item">
+        <span class="grey_text align_right bold">Jumlah Penumpang</span>
+        <span class="black_text align_right bold">{{ totalPassenger }}</span>
+      </div>
+      <div class="flight_detail_item">
+        <span class="grey_text align_left bold">Kelas</span>
+        <span class="black_text align_left bold">{{ seatClass }}</span>
+      </div>
+      <div class="flight_detail_item">
+        <span class="grey_text align_right bold">Kursi</span>
+        <span class="black_text align_right bold">{{ seat }}</span>
+      </div>
+      <div class="flight_detail_item">
+        <span class="grey_text align_left bold">Terminal</span>
+        <span class="black_text align_left bold">{{ terminal }}</span>
+      </div>
+      <div class="flight_detail_item">
+        <span class="grey_text align_right bold">Maskapai</span>
+        <span class="black_text align_right bold">{{ airlineName }}</span>
+      </div>
+    </section>
+
+    <section id="barcode-section">
+      <img src="http://localhost:3000/barcode.png" width="100%" height="auto">
+      <span class="black_text align_center">{{ bookingCode }}</span>
+    </section>
+  </body>
+</html>

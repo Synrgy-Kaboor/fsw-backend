@@ -11,16 +11,23 @@ export async function up(knex: Knex): Promise<void> {
     table.string('role', 255);
     table.string('otp', 255);
     table.boolean('verified').notNullable().defaultTo(false);
-    table.bigInteger('verified_deadlines').notNullable().defaultTo(0);
-    table.boolean('request_for_change_password').notNullable().defaultTo(false);
+    table.bigInteger('verify_deadlines').notNullable().defaultTo(0);
+    table.string('request_for_change_password_otp', 255); 
+    table.boolean('request_for_change_password_verified').notNullable().defaultTo(false);
     table.bigInteger('forget_password_verify_deadlines').notNullable().defaultTo(0);
     table.string('title', 50);
     table.string('gender', 50);
-    table.date('birth_day');
+    table.timestamp('birth_day', { useTz: false });
     table.string('nation', 255);
     table.string('city', 255);
     table.string('address', 255);
     table.boolean('is_wni');
+    table.string('incoming_email_change', 255);
+    table.string('email_otp', 255);
+    table.string('incoming_nohp_change', 255);
+    table.string('nohp_otp', 255);
+    table.string('nik', 255);
+    table.string('image_name', 255);
     table.timestamps(true, true);
   });
 }

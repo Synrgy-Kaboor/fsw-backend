@@ -7,12 +7,10 @@ export async function up(knex: Knex): Promise<void> {
     table.bigIncrements('id').primary();
     table.integer('total_price').notNullable();
     table.timestamp('expired_time', { useTz: false });
+    table.string('payment_method', 50);
     table.boolean('payment_completed').defaultTo(false);
     table.timestamp('payment_date_time', { useTz: false });
     table.string('invoice_number', 255);
-
-    table.integer('payment_method_id');
-    table.foreign('payment_method_id').references('payment_methods.id');
   });
 }
 

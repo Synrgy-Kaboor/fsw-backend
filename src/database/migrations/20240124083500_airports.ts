@@ -8,9 +8,6 @@ export async function up(knex: Knex): Promise<void> {
     table.string('code', 50).notNullable();
     table.string('name', 255).notNullable();
     table.integer('timezone').notNullable();
-
-    table.integer('city_id').notNullable();
-    table.foreign('city_id').references('cities.id');
   });
 }
 

@@ -1,5 +1,4 @@
 import { Model, type ModelObject } from 'objection';
-import { CityModel } from './CitiesModel';
 
 export class AirportModel extends Model {
   id!: number;
@@ -7,25 +6,10 @@ export class AirportModel extends Model {
   name!: string;
   timezone!: number;
 
-  city_id!: number;
-
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/class-literal-property-style
   static get tableName() {
     //eslint-disable-line
     return 'airports';
-  }
-
-  static get relationMappings() {
-    return {
-      city: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: CityModel,
-        join: {
-          from: 'airports.city_id',
-          to: 'cities.id'
-        }
-      }
-    }
   }
 }
 

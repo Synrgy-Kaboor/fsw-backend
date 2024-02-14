@@ -8,15 +8,20 @@
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "migrate": "cd src/database && npx knex migrate:latest",
     "seed": "cd src/database && npx knex seed:run",
-    "test": "npm run migrate && npm run seed && vitest run --coverage",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "test": "npm run rollback-migrations && npm run migrate && npm run seed && vitest run --coverage",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "rollback-migrations": "cd src/database && npx knex migrate:rollback --all"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.511.0",
+    "@aws-sdk/s3-request-presigner": "^3.511.0",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
+    "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "module-alias": "^2.2.3",
@@ -25,11 +30,13 @@
     "pg": "^8.11.3",
     "pino": "^8.17.2",
     "pino-pretty": "^10.3.1",
+    "puppeteer": "^22.0.0",
     "supertest": "^6.3.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
@@ -65,6 +72,7 @@
     "@utils": "dist/utils",
     "@exceptions": "dist/exceptions",
     "@database": "dist/database",
-    "@routes": "dist/routes"
+    "@routes": "dist/routes",
+    "@constants": "dist/constants"
   }
 }
