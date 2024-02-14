@@ -86,3 +86,14 @@ export function getCurrentSeconds (): number {
   const now = new Date();
   return Math.floor(now.getTime() / 1000); 
 };
+
+export function utcDatetimeToTimezoneDate(d: Date, timezone: number): Date {
+  const newDate = addHours(d, timezone);
+
+  newDate.setUTCHours(0);
+  newDate.setUTCMinutes(0);
+  newDate.setUTCSeconds(0);
+  newDate.setUTCMilliseconds(0);
+
+  return newDate;
+}

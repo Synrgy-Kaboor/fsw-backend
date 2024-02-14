@@ -1,11 +1,15 @@
 import type { Flight } from '@models/FlightModel';
 import { AirportRepository } from '@repositories/AirportRepository';
 import { FlightRepository } from '@repositories/FlightRepository';
+import { NotificationRepository } from '@repositories/NotificationRepository';
+import { PriceNotificationRepository } from '@repositories/PriceNotificationRepository';
 import { timezoneString } from '@utils/dateUtils';
 
 export class FlightService {
   private readonly flightRepository = new FlightRepository();
   private readonly airportRepository = new AirportRepository();
+  private readonly notificationRepository = new NotificationRepository();
+  private readonly priceNotificationRepository = new PriceNotificationRepository();
 
   public async getFlights(
     originAirportCode: string, 
@@ -46,6 +50,51 @@ export class FlightService {
 
   public async getFlight(id: number, classCode: string): Promise<Flight> {
     return await this.flightRepository.getFlight(id, classCode);
+  }
+
+  public async addFlight(flight: Partial<Flight>): Promise<void> {
+    if (!flight.origin_airport_id || !flight.destination_airport_id) {
+      throw new Error();
+    }
+
+    // Add flight data
+    await this.flightRepository.addFlight(flight);
+
+    // Find airport data
+    const originAirport = await this.airportRepository.getAirport(flight.origin_airport_id);
+    const destinationAirport = await this.airportRepository.getAirport(flight.destination_airport_id);
+
+    flight.origin_airport = originAirport;
+    flight.destination_airport = destinationAirport;
+
+    // Get relevant price notifications
+    const priceNotifications = await this.priceNotificationRepository.getRelevantPriceNotification(flight);
+
+    // Filter by price
+    const toBeNotified = priceNotifications.filter(p => {
+      const flightPrice = flight.flight_prices?.filter(fp => {
+        if (fp.class_code === p.class_code) return true; 
+        else return false;
+      })[0];
+
+      if (!flightPrice?.adult_price || !flightPrice.child_price || !flightPrice.baby_price) {
+        return false;
+      }
+
+      const totalPrice = p.total_adult * flightPrice.adult_price + p.total_children * flightPrice.child_price + p.total_baby * flightPrice.baby_price
+    
+      return totalPrice >= p.minimum_price && totalPrice <= p.maximum_price;
+    })
+
+    // Create notification for each relevant price notification
+    for (const pn of toBeNotified) {
+      await this.notificationRepository.createNotification({
+        type: 'price',
+        title: `Notifikasi Harga Tiket ${originAirport.code} - ${destinationAirport.code}`,
+        detail: `Ada tiket pesawat dari ${originAirport.code} ke ${destinationAirport.code} yang sesuai dengan bujet kamu. Ayo pesan sebelum kehabisan!`,
+        user_id: pn.user_id
+      })
+    }
   }
 
   private calculateFlightPrice(flight: Flight, numOfAdults: number, numOfChildren: number, numOfBabies: number): number {
