@@ -1,8 +1,9 @@
-name: Deploy to Development Environment
+name: Deploy
 on:
   push:
     branches:
       - develop
+      - main
 jobs:
   lint-test:
     uses: Synrgy-Kaboor/fsw-backend/.github/workflows/lint-test.yml@develop
