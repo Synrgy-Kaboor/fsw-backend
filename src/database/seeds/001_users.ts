@@ -81,6 +81,22 @@ export async function seed(knex: Knex): Promise<void> {
       role: 'USER',
       image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
       phone_number: '087347299394'
-    }
+    },
+    {
+      email: 'admin@gmail.com',
+      password: '$2a$10$gpo2OUse0uGCNzBx1TuXjuCrSIN5w0FCnGl3you9BVpVzquqz2FsS',
+      title: 'Ms',
+      full_name: 'Mia Masha',
+      gender: 'P',
+      birth_day: new Date(Date.UTC(1989, 2, 21)),
+      nation: 'Malaysia',
+      city: 'Penang',
+      address: 'Jl. Ayam Raya 5, blok XX',
+      is_wni: false,
+      verified: true,
+      role: 'ADMIN',
+      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
+      phone_number: '087347299283'
+    },
   ]);
 }

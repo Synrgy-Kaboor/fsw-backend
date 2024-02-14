@@ -49,6 +49,17 @@ export class UserRepository {
     ).id;
   }
 
+  public async getUserRole(email: string): Promise<string> {
+    return (
+      await UserModel.query()
+        .select('role')
+        .findOne({
+          email
+        })
+        .throwIfNotFound()
+    ).role;
+  }
+
   public async updateUserEmailByEmail(
     email: string,
     newEmail: string,
