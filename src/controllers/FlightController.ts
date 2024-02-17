@@ -238,7 +238,7 @@ export class FlightController {
             class_code: fp.classCode,
             adult_price: fp.adultPrice,
             child_price: fp.childPrice,
-            baby_price: fp.childPrice
+            baby_price: fp.babyPrice
           }
         })
       };
