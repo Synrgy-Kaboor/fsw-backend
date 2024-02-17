@@ -157,7 +157,6 @@ export class BookingController {
   ): Promise<void> => {
     try {
       const bookings = await this.bookingService.getBookings(req.user.email);
-      console.log(bookings);
       const responseData: IUserBookingListItem[] = [];
 
       for (const b of bookings) {
