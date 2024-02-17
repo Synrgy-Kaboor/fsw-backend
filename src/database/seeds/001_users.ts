@@ -47,7 +47,6 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: false,
       verified: true,
       role: 'USER',
-      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
       phone_number: '087347299283'
     },
     {
@@ -79,7 +78,6 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: false,
       verified: true,
       role: 'USER',
-      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
       phone_number: '087347299394'
     },
     {
@@ -95,7 +93,6 @@ export async function seed(knex: Knex): Promise<void> {
       is_wni: false,
       verified: true,
       role: 'ADMIN',
-      image_name: 'd63e31aa-4b67-4763-bd83-ed9b513d3204.png',
       phone_number: '087347299283'
     },
   ]);
